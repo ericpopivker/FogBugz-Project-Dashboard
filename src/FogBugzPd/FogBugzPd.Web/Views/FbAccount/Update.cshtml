@@ -378,8 +378,11 @@
 			});
 			
 			jQuery.validator.addMethod('correctlistemails', function (value, element, params) {
-				var regExp = /^(([a-z0-9_-]+\.)*[a-z0-9_-]+@@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6})(,(([a-z0-9_-]+\.)*[a-z0-9_-]+@@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}))*$/;
-				return regExp.test(value);
+				if ($('#AllowSendDailyDigestEmails').is(':checked')) {
+					var regExp = /^(([a-z0-9_-]+\.)*[a-z0-9_-]+@@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6})(,(([a-z0-9_-]+\.)*[a-z0-9_-]+@@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}))*$/;
+					return regExp.test(value);
+				}
+				return true;
 			}, '');
 
 			jQuery.validator.unobtrusive.adapters.add('emailslist', {}, function (options) {
