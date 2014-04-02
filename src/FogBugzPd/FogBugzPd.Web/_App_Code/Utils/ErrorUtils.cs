@@ -1,5 +1,4 @@
 using System;
-using ErrorLog.ApiClient;
 using FogBugzPd.Core;
 using FogBugzPd.Infrastructure;
 using log4net;
