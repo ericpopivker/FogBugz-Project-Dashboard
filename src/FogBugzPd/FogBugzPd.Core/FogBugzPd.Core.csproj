@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{05596BF9-676D-49AF-94CD-FEAEECBAF6FA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FogBugzPd.Core</RootNamespace>
+    <AssemblyName>FogBugzPd.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SingleTenant|AnyCPU'">
+    <OutputPath>bin\SingleTenant\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Entech|AnyCPU'">
+    <OutputPath>bin\Entech\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\..\lib\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\..\..\lib\HtmlAgilityPack.1.4.3\lib\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="MiniProfiler, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\MiniProfiler.2.1.0\lib\net40\MiniProfiler.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FogBugzApi\CaseUtils.cs" />
+    <Compile Include="FbAccountModule\FbAccountContext.cs" />
+    <Compile Include="FbAccountModule\TestRailConfiguration.cs" />
+    <Compile Include="FbAccountModule\FbAccountSettings.cs" />
+    <Compile Include="FbAccountModule\FbAccount.cs" />
+    <Compile Include="FogBugzApi\Enums\CaseStatus.cs" />
+    <Compile Include="FogBugzApi\Enums\ChartType.cs" />
+    <Compile Include="FogBugzApi\FogBugzClientCache.cs" />
+    <Compile Include="FogBugzApi\FogBugzScheduleLoader.cs" />
+    <Compile Include="FogBugzApi\Types\CaseSet.cs" />
+    <Compile Include="FogBugzApi\Types\ChartItem.cs" />
+    <Compile Include="FogBugzApi\Types\FogBugzCasesLinkParams.cs" />
+    <Compile Include="FogBugzApi\Types\Group.cs" />
+    <Compile Include="FogBugzApi\Types\Milestone.cs" />
+    <Compile Include="FogBugzApi\Types\Project.cs" />
+    <Compile Include="FogBugzApi\Types\Schedule.cs" />
+    <Compile Include="FogBugzApi\Types\Tag.cs" />
+    <Compile Include="FogBugzPdDbContext.cs" />
+    <Compile Include="FogBugzPdDbContextScope.cs" />
+    <Compile Include="FogBugzApi\FogBugzToTestRailUtils.cs" />
+    <Compile Include="FogBugzApi\FogBugzGateway.cs" />
+    <Compile Include="LogModule\LogEntityTypeLookup.cs" />
+    <Compile Include="LogModule\LogEntry.cs" />
+    <Compile Include="LogModule\LogEntryTypeLookup.cs" />
+    <Compile Include="Lookup.cs" />
+    <Compile Include="Migrations\201307081845338_InitialMigration.cs" />
+    <Compile Include="Migrations\201307081845338_InitialMigration.Designer.cs">
+      <DependentUpon>201307081845338_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201307091714110_FB2573_AllowQaEstimates_QaEstimateCustomFieldname2FbAccountSettings.cs" />
+    <Compile Include="Migrations\201307091714110_FB2573_AllowQaEstimates_QaEstimateCustomFieldname2FbAccountSettings.Designer.cs">
+      <DependentUpon>201307091714110_FB2573_AllowQaEstimates_QaEstimateCustomFieldname2FbAccountSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201307101951194_FB2564_Rename_TestRailConfigId.cs" />
+    <Compile Include="Migrations\201307101951194_FB2564_Rename_TestRailConfigId.Designer.cs">
+      <DependentUpon>201307101951194_FB2564_Rename_TestRailConfigId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201307221903275_FB2423_ChangeResovledVerifiedStatusType.cs" />
+    <Compile Include="Migrations\201307221903275_FB2423_ChangeResovledVerifiedStatusType.Designer.cs">
+      <DependentUpon>201307221903275_FB2423_ChangeResovledVerifiedStatusType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201307311309585_FB2654_ChangeQaEstimateCustomFieldname_To_QaEstimateCustomFieldName.cs" />
+    <Compile Include="Migrations\201307311309585_FB2654_ChangeQaEstimateCustomFieldname_To_QaEstimateCustomFieldName.Designer.cs">
+      <DependentUpon>201307311309585_FB2654_ChangeQaEstimateCustomFieldname_To_QaEstimateCustomFieldName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201311052014159_AddLogModule.cs" />
+    <Compile Include="Migrations\201311052014159_AddLogModule.Designer.cs">
+      <DependentUpon>201311052014159_AddLogModule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201311071753024_AddDailyEmailsToFbAccountSettings.cs" />
+    <Compile Include="Migrations\201311071753024_AddDailyEmailsToFbAccountSettings.Designer.cs">
+      <DependentUpon>201311071753024_AddDailyEmailsToFbAccountSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201311081811153_AddGuidAndTokenToFbSettings.cs" />
+    <Compile Include="Migrations\201311081811153_AddGuidAndTokenToFbSettings.Designer.cs">
+      <DependentUpon>201311081811153_AddGuidAndTokenToFbSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201311211917132_DailyDigestEmailGuidRename.cs" />
+    <Compile Include="Migrations\201311211917132_DailyDigestEmailGuidRename.Designer.cs">
+      <DependentUpon>201311211917132_DailyDigestEmailGuidRename.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\DbMigrationExtended.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="MsCache.cs" />
+    <Compile Include="MsCacheKey.cs" />
+    <Compile Include="FogBugzApi\FixForExtensions.cs" />
+    <Compile Include="FogBugzApi\ProjectMilestoneList.cs" />
+    <Compile Include="ProgressStatus\ProgressStatusInfo.cs" />
+    <Compile Include="ProjectStatus\EmployeeStatus.cs" />
+    <Compile Include="ProjectStatus\ProjectStatusListLoader.cs" />
+    <Compile Include="ProjectStatus\ProjectStatusListItem.cs" />
+    <Compile Include="ProjectStatus\ProjectStatus.cs" />
+    <Compile Include="ProjectStatus\ProjectStatusCalculator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestRailApi\TestRailGateway.cs" />
+    <Compile Include="TestRailApi\TestRailPlanSummary.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FogbugzPd.Infrastructure\FogBugzPd.Infrastructure.csproj">
+      <Project>{D079465C-50D2-4498-96DB-9F1855261CCA}</Project>
+      <Name>FogBugzPd.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FogLampz\FogLampz.csproj">
+      <Project>{b02dd64b-e35f-47ed-ab64-89c640cef087}</Project>
+      <Name>FogLampz</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestRail.MiniAPI\TestRail.MiniAPI.csproj">
+      <Project>{20ca8888-6af5-4a0c-a565-c44b9e688749}</Project>
+      <Name>TestRail.MiniAPI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201307081845338_InitialMigration.resx">
+      <DependentUpon>201307081845338_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201307091714110_FB2573_AllowQaEstimates_QaEstimateCustomFieldname2FbAccountSettings.resx">
+      <DependentUpon>201307091714110_FB2573_AllowQaEstimates_QaEstimateCustomFieldname2FbAccountSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201307101951194_FB2564_Rename_TestRailConfigId.resx">
+      <DependentUpon>201307101951194_FB2564_Rename_TestRailConfigId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201307221903275_FB2423_ChangeResovledVerifiedStatusType.resx">
+      <DependentUpon>201307221903275_FB2423_ChangeResovledVerifiedStatusType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201307311309585_FB2654_ChangeQaEstimateCustomFieldname_To_QaEstimateCustomFieldName.resx">
+      <DependentUpon>201307311309585_FB2654_ChangeQaEstimateCustomFieldname_To_QaEstimateCustomFieldName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311052014159_AddLogModule.resx">
+      <DependentUpon>201311052014159_AddLogModule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311071753024_AddDailyEmailsToFbAccountSettings.resx">
+      <DependentUpon>201311071753024_AddDailyEmailsToFbAccountSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311081811153_AddGuidAndTokenToFbSettings.resx">
+      <DependentUpon>201311081811153_AddGuidAndTokenToFbSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311211917132_DailyDigestEmailGuidRename.resx">
+      <DependentUpon>201311211917132_DailyDigestEmailGuidRename.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

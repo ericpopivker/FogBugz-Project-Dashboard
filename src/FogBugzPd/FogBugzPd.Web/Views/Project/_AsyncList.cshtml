@@ -1,0 +1,101 @@
+@using FogBugzPd.Core
+@using FogBugzPd.Web
+@using FogBugzPd.Web.Models.Project
+@using FogBugzPd.Web._App_Code.Extensions
+@using FogBugzPd.Web._App_Code.Utils
+@model FogBugzPd.Core.FogBugzApi.ProjectMilestoneList
+
+
+
+
+<style type="text/css">
+	.table th, .table td
+	{
+		padding: 0;
+	}
+</style>
+
+<table class="table">
+	<tr>
+		<th style="width: 25%;">Project
+		</th>
+		<th style="width: 70%;">
+			@if (Model.ShowSubProjects)
+			{
+				<table class="table">
+					<tr>
+						<td style="width: 50%;">Milestone</td>
+						<td style="width: 50%;">Sub-Project</td>
+					</tr>
+				</table>
+			}
+			else
+			{
+				<div style="padding-bottom: 10px;">Milestone</div>
+			}
+
+		</th>
+
+	</tr>
+	@{ var i = 0; }
+	@foreach (var item in Model.Items)
+	{
+		i++;
+		<tr style="@(i < Model.Items.Count ? "border-bottom: solid lightgray 1px;" : "")">
+			<td>
+				@* @Html.ActionLink(item.Project.Name, "Dashboard", "Project", new { milestoneId = item.Project.Index }, "")*@
+				@item.Project.Name
+			</td>
+			<td style="padding-top: 0">
+				@if (Model.ShowSubProjects)
+				{
+					<table class="table">
+						@foreach (var milestoneListItem in item.MilestoneListItems)
+						{
+							<tr>
+								<td style="width: 50%;">
+									
+									@Html.ActionLink(milestoneListItem.Milestone.Name, "Dashboard", "Project", new {projectId = item.Project.Index, milestoneId = milestoneListItem.Milestone.Index}, "")
+									<span id="@item.Project.Index-@milestoneListItem.Milestone.Index"><img src="@Url.Content("~/Content/img/progress.gif")" alt="progress" /></span>
+									<br />
+								</td>
+								<td style="width: 50%;">
+									@foreach (var subProjectParentCase in milestoneListItem.SubProjectParentCases)
+									{
+										@Html.ActionLink(subProjectParentCase.Title, "Dashboard", "Project",
+											 new
+												 {
+													 projectId = item.Project.Index,
+													 milestoneId = milestoneListItem.Milestone.Index,
+													 subProjectParentCaseId = subProjectParentCase.Index
+												 }, "")
+										<span id="@item.Project.Index-@milestoneListItem.Milestone.Index-@subProjectParentCase.Index"><img src="@Url.Content("~/Content/img/progress.gif")" alt="progress"/></span>
+										<br />
+									}
+								</td>
+							</tr>
+
+						}
+				</table>
+			}
+			else
+			{
+				foreach (var milestoneListItem in item.MilestoneListItems)
+				{
+					@Html.ActionLink(milestoneListItem.Milestone.Name, "Dashboard", "Project", new {projectId = item.Project.Index, milestoneId = milestoneListItem.Milestone.Index}, "")
+					<span  id="@item.Project.Index-@milestoneListItem.Milestone.Index"><img src="@Url.Content("~/Content/img/progress.gif")" alt="progress"/></span>
+					<br />
+				}
+					<br />
+			}
+			</td>
+
+		</tr>
+	}
+</table>
+
+
+<div style="float: right;" class="mscache">
+	@Html.RefreshData(Model.MsCache.CreatedAt, null, null, null, MsCacheDataType.ProjectLists)
+</div>
+<div style="clear: both;"></div>

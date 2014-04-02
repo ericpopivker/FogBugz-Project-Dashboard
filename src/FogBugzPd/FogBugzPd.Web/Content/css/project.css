@@ -1,0 +1,37 @@
+﻿#loader {
+	height: 200px;
+	background-color: white;
+	opacity: .8;
+	position: absolute;
+	text-align: center;
+	z-index: 1500;
+}
+
+#loader img {
+	width: 200px;
+	margin: auto;
+	margin-top: 50px;
+}
+
+
+.table tfoot tr {
+	font-weight: bold;
+}
+
+.table tbody * {
+	border: 0;
+}
+
+.table thead:last-child {
+	border: 1px;
+}
+
+#project-content.dashboard {
+	background-color:#EEE;
+	padding: 20px;
+	width: 1340px;
+}
+
+table.stat tr td:last-child {
+	text-align: right;
+}

@@ -1,0 +1,426 @@
+﻿.container {
+	width: 1380px;
+	position: relative;
+}
+
+.well {
+	background-color: white;
+	padding-top: 0;
+	padding-bottom: 5px;
+}
+
+table.sortable thead, table.sortable tfoot, table.sortable tbody {
+	display: block !important;
+	width: 100%;
+}
+
+table.sortable tbody
+{
+	overflow: auto;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	max-height: 360px;
+}
+
+table.sortable tr {
+	display:block !important;
+}
+
+table.sortable tbody tr {
+	width: 101%;
+}
+
+table.sortable th,table.sortable td {
+	display: inline-block !important;
+}
+
+.vertical 
+{
+	transform: rotate(-90deg);
+	-webkit-transform: rotate(-90deg);
+	white-space: nowrap;
+	-ms-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+}
+
+.tooltip {
+	z-index: 1009;
+}
+
+.kkcountdown {
+	font-weight: bold;
+	position: absolute;
+	float: right;
+	right: 0;
+	top: 65px;
+}
+
+.kkcountdown span {
+	font-size: 21px;
+}
+
+.kkcountdown span.kkc-dni-text,
+.kkcountdown span.kkc-godz-text,
+.kkcountdown span.kkc-min-text, 
+.kkcountdown span.kkc-sec-text  {
+	font-size: 14px;
+	color: #666;
+}
+
+.tag {
+	margin-top: 5px;
+	cursor: pointer !important;
+	margin-right: 10px;
+}
+
+body {
+	overflow-y: scroll;
+}
+
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error
+{
+	color: #ff0000;
+}
+
+.field-validation-valid
+{
+	display: none;
+}
+
+.validation-summary-errors {
+	font-weight: bold;
+	color: #ff0000;
+}
+
+.validation-summary-valid {
+	display: none;
+}
+
+.footer-copy {
+	bottom: 20px;
+	position: inherit;
+	width: 100%;
+	text-align: center;
+	color: #AAA;
+	font-size: 11px;
+}
+
+.login-title
+{
+	margin: 20px;
+	text-align: center;
+	font-size: 40px;
+	font-weight: bold;
+	color: #333333;
+}
+
+.login-under-title
+{
+	margin: 10px;
+	text-align: center;
+	font-size: 24px;
+	font-weight: bold;
+	color: #333333;
+}
+
+.for-example-under-url { 
+	*display: inline-block;
+	*padding-left: 20px;
+	margin-left: 180px;
+	*margin-left: 0;
+	font-size: small;
+	color: gray;
+}
+.mscache 
+{
+	color: #999999;
+    font-weight: normal;
+    line-height: 1;
+	font-size: 11px;
+    padding-top: 70px;
+}
+
+
+/* SETTINGS */
+
+.settings-form .success-message
+{
+	background-color: #DAEBF5;
+}
+
+.settings-form .tip
+{
+	display: inline-block;
+	float:left;
+	padding-right: 10px;
+	margin-top: 8px;
+}
+
+#testRailInfoPane fieldset{
+    border: 1px solid #DDDDDD;
+    margin: 0 0 1.5em;
+    padding: 0 1.4em 1.4em;
+}
+
+.long {
+	width: 412px;
+}
+
+/* Styles for validation helper*/
+.field-validation-error {
+	color: #ff0000;
+}
+
+span.field-validation-error span {
+	color: #ff0000;
+}
+
+.field-validation-valid {
+	display: none;
+}
+
+
+.validation-summary-errors {
+	font-weight: bold;
+	color: #ff0000;
+}
+
+.validation-summary-valid {
+	display: none;
+}
+
+/* Dashboard Tab*/
+
+.nav-tabs > li > #dashboard-tab {
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+    line-height: 20px;
+	padding-bottom: 2px;
+	padding-top: 4px;
+}
+
+.nav-tabs > li >  #dashboard-tab:hover {
+    border-color: #EEEEEE #EEEEEE #DDDDDD;
+	background-color: #EEEEEE;
+    text-decoration: none;
+}
+
+.nav-tabs > li > #dashboard-tab > .btn-link:hover {
+	text-decoration: none;
+}
+
+/*Project Status styles*/
+
+
+.verybehind
+{
+	color: #CC3300;
+	font-weight: bold;
+}
+
+.littlebehind
+{
+	color:  #FF8800;
+	font-weight: bold;
+}
+
+.notstarted
+{
+	color: #000000;
+	font-weight: bold;
+}
+
+.ontime
+{
+	color: #0BFA51;
+	font-weight: bold;
+}
+
+.littleahead
+{
+	color: #33CC33;
+	font-weight: bold;
+}
+
+.veryahead
+{
+	color: #008C00;
+	font-weight: bold;
+}
+
+
+.btn-verybehind {
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  font-size: 13px;
+  margin: 1px 0 1px 0;
+  background-color: #FD5531;
+  *background-color: #CC3300;
+  background-image: -moz-linear-gradient(top, #FD5531, #CC3300);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#FD5531), to(#CC3300));
+  background-image: -webkit-linear-gradient(top, #FD5531, #CC3300);
+  background-image: -o-linear-gradient(top, #FD5531, #CC3300);
+  background-image: linear-gradient(to bottom, #FD5531, #CC3300);
+  background-repeat: repeat-x;
+  border-color: #FD5531 #CC3300 #387038;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+.btn-verybehind:hover,
+.btn-verybehind:active,
+.btn-verybehind.active,
+.btn-verybehind.disabled,
+.btn-verybehind[disabled] {
+  color: #ffffff;
+  background-color: #CC3300;
+  *background-color: #EE3300;
+}
+
+.btn-littlebehind {
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  font-size: 13px;
+  margin: 1px 0 1px 0;
+  background-color: #FFA500;
+  *background-color: #FF8800;
+  background-image: -moz-linear-gradient(top, #FFA500 ,#FF8800);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#FFA500), to(#FF8800));
+  background-image: -webkit-linear-gradient(top, #FFA500, #FF8800);
+  background-image: -o-linear-gradient(top, #FFA500, #FF8800);
+  background-image: linear-gradient(to bottom, #FFA500, #FF8800);
+  background-repeat: repeat-x;
+  border-color: #FFA500 #FF8800 #387038;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+.btn-littlebehind:hover,
+.btn-littlebehind:active,
+.btn-littlebehind.active,
+.btn-littlebehind.disabled,
+.btn-littlebehind[disabled] {
+  color: #ffffff;
+  background-color: #FF8800;
+  *background-color: #FFA500;
+}
+
+
+.btn-ontime {
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  font-size: 13px;
+  margin: 1px 0 1px 0;
+  background-color: #0BFA51;
+  *background-color: #0BE651;
+  background-image: -moz-linear-gradient(top, #0BFA51, #0BE651);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0BFA51), to(#0BE651));
+  background-image: -webkit-linear-gradient(top, #0BFA51, #0BE651);
+  background-image: -o-linear-gradient(top, #0BFA51, #0BE651);
+  background-image: linear-gradient(to bottom, #0BFA51, #0BE651 );
+  background-repeat: repeat-x;
+  border-color: #0BE651 #0BFA51 #387038;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+.btn-ontime:hover,
+.btn-ontime:active,
+.btn-ontime.active,
+.btn-ontime.disabled,
+.btn-ontime[disabled] {
+  color: #ffffff;
+  background-color: #0BE651;
+  *background-color: #0BFA51;
+}
+.btn-notstarted {
+  color: #000000;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  font-size: 13px;
+  margin: 1px 0 1px 0;
+  background-color: #EEEEEE;
+  *background-color: #DDDDDD;
+  background-image: -moz-linear-gradient(top, #EEEEEE, #DDDDDD);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#EEEEEE), to(#DDDDDD));
+  background-image: -webkit-linear-gradient(top, #EEEEEE, #DDDDDD);
+  background-image: -o-linear-gradient(top, #EEEEEE, #DDDDDD);
+  background-image: linear-gradient(to bottom, #EEEEEE, #DDDDDD);
+  background-repeat: repeat-x;
+  border-color: #EEEEEE #DDDDDD #387038;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+.btn-notstarted:hover,
+.btn-notstarted:active,
+.btn-notstarted.active,
+.btn-notstarted.disabled,
+.btn-notstarted[disabled] {
+  color: #000000;
+  background-color: #DDDDDD;
+  *background-color: #DDDDDD;
+}
+
+.btn-littleahead {
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  font-size: 13px;
+  margin: 1px 0 1px 0;
+  background-color: #58D658;
+  *background-color: #33CC33;
+  background-image: -moz-linear-gradient(top, #58D658, #33CC33);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#58D658), to(#33CC33));
+  background-image: -webkit-linear-gradient(top, #58D658, #33CC33);
+  background-image: -o-linear-gradient(top, #58D658, #33CC33);
+  background-image: linear-gradient(to bottom, #58D658, #33CC33);
+  background-repeat: repeat-x;
+  border-color: #58D658 #33CC33 #387038;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+.btn-littleahead:hover,
+.btn-littleahead:active,
+.btn-littleahead.active,
+.btn-littleahead.disabled,
+.btn-littleahead[disabled] {
+  color: #ffffff;
+  background-color: #33CC33;
+  *background-color: #00CA00;
+}
+
+.btn-veryahead {
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  font-size: 13px;
+  margin: 1px 0 1px 0;
+  background-color: #00B000;
+  *background-color: #008C00;
+  background-image: -moz-linear-gradient(top, #00B000, #008C00);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00B000), to(#008C00));
+  background-image: -webkit-linear-gradient(top, #00B000, #008C00);
+  background-image: -o-linear-gradient(top, #00B000, #008C00);
+  background-image: linear-gradient(to bottom, #00B000, #008C00);
+  background-repeat: repeat-x;
+  border-color: #00B000 #008C00 #387038;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+.btn-veryahead:hover,
+.btn-veryahead:active,
+.btn-veryahead.active,
+.btn-veryahead.disabled,
+.btn-veryahead[disabled] {
+  color: #ffffff;
+  background-color: #008C00;
+  *background-color: #007900;
+}

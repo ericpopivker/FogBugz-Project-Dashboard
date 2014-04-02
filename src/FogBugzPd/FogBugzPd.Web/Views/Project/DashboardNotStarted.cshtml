@@ -1,0 +1,89 @@
+﻿@model FogBugzPd.Web.Models.Project.DashboardNotStartedViewModel
+@{
+    ViewBag.Title = "Dashboard (Not Started)";
+    Layout = "~/Views/Project/_LayoutNotStarted.cshtml";
+}
+
+@section Js
+{
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("#loader").height($("#project-content").height());
+			if ($("#loader").height() == 0)
+				$("#loader").height(200);
+			$("#loader").show();
+
+			$.post(resolveUrl("~/Project/AsyncDashboardNotStarted"),
+				{
+					projectId: "@Model.ProjectId",
+					milestoneId: "@Model.MilestoneId",
+					subProjectParentCaseId: "@Model.SubProjectParentCaseId"
+				},
+				function (result) {
+					$("#dashboard-async-content").empty();
+					$("#dashboard-async-content").html(result);
+					$("#dashboard-async-content").show();
+					$("#loader").hide();
+				}, "HTML");
+		});
+	</script>
+}
+
+@section Css
+{
+	<style type="text/css">
+	.table tbody tr > td.verybehind {
+	  background-color: #CC3300;
+	}
+
+	.table tbody tr > td.littlebehind {
+	  background-color: #FFFF00;
+	}
+
+	.table tbody tr > td.ontime {
+	  background-color: #99FF99;
+	}
+
+
+	.table tbody tr > td.littleahead {
+	  background-color: #33CC33;
+	}
+
+
+	.table tbody tr > td.veryahead {
+	  background-color: #008C00;
+	}
+
+	.table tfoot tr > td.verybehind {
+	  background-color: #CC3300;
+	}
+
+	.table tfoot tr > td.littlebehind {
+	  background-color: #FFFF00;
+	}
+
+	.table tfoot tr > td.ontime {
+	  background-color: #99FF99;
+	}
+
+
+	.table tfoot tr > td.littleahead {
+	  background-color: #33CC33;
+	}
+
+
+	.table tfoot tr > td.veryahead {
+	  background-color: #008C00;
+	}
+
+	table.sortable tbody tr {
+		width: 100%;
+	}
+
+</style>
+
+}
+
+<div id="dashboard-async-content">
+</div>
+

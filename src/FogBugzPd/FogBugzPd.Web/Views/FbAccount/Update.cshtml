@@ -1,0 +1,397 @@
+﻿@model FogBugzPd.Web.Models.FbAccount.SettingViewModel
+@{
+	ViewBag.Title = "Settings";
+	ViewBag.MasterTitle = "Settings";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Css
+{
+	<style type="text/css">
+	.row {
+		min-height: 50px;
+		line-height: 50px;
+		vertical-align: middle;
+	}
+
+	input, select {
+		margin-bottom: 0px;
+	}
+
+	#testrail-legend{
+		font-size: 1.2em;
+		font-weight: bold;
+		border: none;
+		margin-bottom: 0;
+		width: auto;
+	}
+
+	.input-prepend {
+		margin-bottom: 0;
+	}
+
+	
+
+	
+	.form-horizontal .control-label {
+		width: 250px;
+	}
+
+	</style>
+}
+
+<div class="settings-form">
+
+@using (Html.BeginForm("Settings", "FbAccount", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+		@Html.HiddenFor(model => model.Id)
+			<div class="control-group">
+				@Html.LabelFor(m => m.ResolvedVerifiedStatusId, new { @class = "control-label" })
+				<a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="Case status when it is verified by QA team"></a>
+				<div class="controls">
+					@Html.DropDownListFor(m => m.ResolvedVerifiedStatusId, Model.StatusesAvailable)
+				</div>
+			</div>
+
+			<div class="control-group">
+				@Html.LabelFor(m => m.AllowSubProjects, new { @class = "control-label" })
+				<a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="For grouping of all the cases under specific parent case as a separate project"></a>
+				<div class="controls">
+					@Html.CheckBoxFor(m => m.AllowSubProjects)
+				</div>
+			</div>
+
+			<div class="control-group" id="projectParentCasePane">
+				@Html.LabelFor(m => m.SubProjectTag, new { @class = "control-label" })
+				<a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="Tag name for sub-project parent cases"></a>
+				<div class="controls">
+					@Html.TextBoxFor(m => m.SubProjectTag)
+					<span>@Html.ValidationMessageFor(m => m.SubProjectTag)</span>
+				</div>
+			</div>
+
+			<div class="control-group">
+				@Html.LabelFor(m => m.AllowQaEstimates, new { @class = "control-label" })
+				<a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="Get test estimates from custom field for each case"></a>
+				<div class="controls">
+					@Html.CheckBoxFor(m => m.AllowQaEstimates)
+				</div>
+			</div>
+
+			<div class="control-group" id="paneQaPercentage">
+				@Html.LabelFor(m => m.QaPercentage, new { @class = "control-label" })
+				<a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="Percentage of time per case that will be spent on testing. Calculated based on estimated/elapsed development time."></a>
+				<div class="controls">
+					<div class="input-prepend">
+						@Html.TextBoxFor(m => m.QaPercentage, new { maxlength = 3, style = "width: 35px;" })
+						<span class="add-on">%</span>
+					</div>
+					<span class="help-inline error">@Html.ValidationMessageFor(m => m.QaPercentage)</span>
+				</div>
+			</div>
+
+			<div class="control-group" id="paneQaCustomField">
+				@Html.LabelFor(m => m.QaEstimateCustomFieldname, new { @class = "control-label" })
+				<a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="Name of custom field for testing estimate.  Stores a number in minutes."></a>
+				<div class="controls">
+					@Html.TextBoxFor(m => m.QaEstimateCustomFieldname, new { maxlength = 32 })
+					<span class="help-inline error">@Html.ValidationMessageFor(m => m.QaEstimateCustomFieldname)</span>
+				</div>
+			</div>
+
+			<div class="control-group">
+				@Html.LabelFor(m => m.AllowTestRail, new { @class = "control-label" })
+				<a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="Enable TestRail integration"></a>
+				<div class="controls">
+					@Html.CheckBoxFor(m => m.AllowTestRail)
+				</div>
+			</div>
+
+			<div id="testRailInfoPane" style="display: none;">
+				<fieldset style="width: 700px;">
+					<legend id="testrail-legend">TestRail</legend>
+					<div class="control-group" style="margin-left: -30px;">
+						@Html.LabelFor(m => m.TestRailUrl, new { @class = "control-label" })
+						<a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="Url of TestRail API"></a>
+						<div class="controls ">
+							@Html.TextBoxFor(m => m.TestRailUrl, new { @class = "long" }) <br />
+							<span style="margin-left: 100px;">
+								@Html.ValidationMessageFor(m => m.TestRailUrl)
+							</span>
+						</div>
+					</div>
+				<div class="control-group" style="margin-left: -30px;">
+					@Html.LabelFor(m => m.TestRailToken, new { @class = "control-label" })
+					<a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="Token used to access TestRail API"></a>
+					<div class="controls">
+						@Html.TextBoxFor(m => m.TestRailToken) <br />
+						<span style="margin-left: 100px;">
+							@Html.ValidationMessageFor(m => m.TestRailToken)
+						</span>
+					</div>
+				</div>
+				</fieldset>
+			</div>
+
+			<div class="control-group">
+				@Html.LabelFor(m => m.AllowSendDailyDigestEmails, new { @class = "control-label" })
+				<a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="Sends a report of daily statuses daily at Email. Only active projects are included. Pre-Caching is highly recommended. (if multi-tenant) - requires token saved"></a>
+				<div class="controls">
+					@Html.CheckBoxFor(m => m.AllowSendDailyDigestEmails)
+				</div>
+			</div>
+
+			<div class="control-group" id="dailyEmailPane">
+				@Html.LabelFor(m => m.SendDailyDigestEmailsTo, new { @class = "control-label" })
+				<a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="Emails to send report"></a>
+				<div class="controls">
+					@Html.TextBoxFor(m => m.SendDailyDigestEmailsTo)
+					<span>@Html.ValidationMessageFor(m => m.SendDailyDigestEmailsTo)</span>
+				</div>
+			</div>
+	
+			<div class="form-actions">
+				<input type="submit" value="Update" name="submit" class="btn btn-primary" />
+			</div>
+}
+</div>
+
+@section Js
+{
+	<script type="text/javascript">
+		/*
+		$("form").validate({
+			highlight: function (element, errorClass, validClass) {
+				$(element).addClass(errorClass).removeClass(validClass);
+				$(element.form).find("label[for=" + element.id + "]")
+				.addClass(errorClass);
+				$(element).css("border", "1px solid #ff0000");
+				$(element).css("background-color", "#ffeeee");
+			},
+			unhighlight: function (element, errorClass, validClass) {
+				$(element).removeClass(errorClass).addClass(validClass);
+				$(element.form).find("label[for=" + element.id + "]")
+				.removeClass(errorClass);
+				$(element).css("border", "1px solid #CCCCCC");
+				$(element).css("background-color", "#FFFFFF");
+			}
+		});
+		*/
+		/*
+		$('form').submit(function () {
+			$(this).validate();
+
+			highlightValidation();
+			return false;
+		});
+		*/
+		
+		/*
+		$('form').live("#TestRailUrl", function () {
+			alert("g");
+		});
+		/*
+		$('form').submit(function () {
+			if ($(this).valid()) {
+				$(this).find('div.span3').each(function () {
+					if ($(this).find('span.field-validation-error').length == 0) {
+						$(this).find('input').each(function () {
+							$(this).removeClass("error");
+						});
+					}
+				});
+			}
+			else {
+				$(this).find('div.span3').each(function () {
+					if ($(this).find('span.field-validation-error').length > 0) {
+						$(this).find('span.field-validation-error').each(function () {
+							var elementName = $(this).attr("data-valmsg-for");
+							$("#" + elementName).addClass("error");
+						});
+						
+					}
+				});
+			}
+		});
+		*/
+
+		function highlightValidation() {
+			$("form").find('div.span3').each(function() {
+				if ($(this).find('span.field-validation-error').length == 0) {
+					$(this).find('input').each(function() {
+						//$(this).removeClass("error");
+						
+						$(this).css("border", "1px solid #CCCCCC");
+						$(this).css("background-color", "#FFFFFF");
+					});
+				} else {
+					$(this).find('span.field-validation-error').each(function() {
+						var elementName = $(this).attr("data-valmsg-for");
+						//$("#" + elementName).addClass("error");
+						$("#" + elementName).css("border", "1px solid #ff0000");
+						$("#" + elementName).css("background-color", "#ffeeee");
+					});
+				}
+			});
+		}
+
+		function ShowTestRailInfo() {
+			if ($('#AllowTestRail').is(':checked')) {
+				$("#testRailInfoPane").show();
+			} else {
+				$("#testRailInfoPane").hide();
+			}
+		}
+
+		function ShowProjectParentCase() {
+			if ($('#AllowSubProjects').is(':checked')) {
+				$("#projectParentCasePane").show();
+			} else {
+				$("#projectParentCasePane").hide();
+			}
+		}
+		
+		function ShowDailySendEmail() {
+			if ($('#AllowSendDailyDigestEmails').is(':checked')) {
+				$("#dailyEmailPane").show();
+			} else {
+				$("#dailyEmailPane").hide();
+			}
+		}
+		
+		function ShowQaEstimates() {
+		    if ($('#AllowQaEstimates').is(':checked')) {
+		        $("#paneQaCustomField").show();
+		        $("#paneQaPercentage").hide();
+            } else {
+		        $("#paneQaCustomField").hide();
+		        $("#paneQaPercentage").show();
+		    }
+		}
+
+		$(function() {
+			ShowTestRailInfo();
+			$("#AllowTestRail").click(ShowTestRailInfo);
+
+			ShowProjectParentCase();
+			$("#AllowSubProjects").click(ShowProjectParentCase);
+		    
+			ShowQaEstimates();
+			$("#AllowQaEstimates").click(ShowQaEstimates);
+			
+
+		});
+		
+		$(function () {
+			ShowDailySendEmail();
+			$("#AllowSendDailyDigestEmails").click(ShowDailySendEmail);
+		});
+
+		(function($) {
+			jQuery.validator.addMethod('correctUrl', function (value, element, params) {
+				if (!$("#testRailInfoPane").is(":visible")) return true;
+				var regExp = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-?&]*)*\/?$/;
+				return regExp.test(value);
+			}, '');
+
+			jQuery.validator.unobtrusive.adapters.add('customurl', {}, function (options) {
+				options.rules['correctUrl'] = true;
+				options.messages['correctUrl'] = options.message;
+			});
+
+			jQuery.validator.addMethod('testrailconfigRequire', function(value, element, params) {
+				if ($("#testRailInfoPane").is(":visible") && value == "") return false;
+				return true;
+			}, '');
+
+			jQuery.validator.unobtrusive.adapters.add('testrailconfig', {}, function(options) {
+				options.rules['testrailconfigRequire'] = true;
+				options.messages['testrailconfigRequire'] = options.message;
+			});
+
+			jQuery.validator.addMethod('allowparentcaseRequire', function(value, element, params) {
+				if ($("#projectParentCasePane").is(":visible") && $.trim(value) == "") return false;
+				return true;
+			}, '');
+
+			jQuery.validator.unobtrusive.adapters.add('allowparentcase', {}, function(options) {
+				options.rules['allowparentcaseRequire'] = true;
+				options.messages['allowparentcaseRequire'] = options.message;
+			});
+			
+			jQuery.validator.addMethod('allowdailyemailRequire', function (value, element, params) {
+				if ($("#dailyEmailPane").is(":visible") && $.trim(value) == "") return false;
+				return true;
+			}, '');
+
+			jQuery.validator.unobtrusive.adapters.add('allowallowdailyemail', {}, function (options) {
+				options.rules['allowdailyemailRequire'] = true;
+				options.messages['allowdailyemailRequire'] = options.message;
+			});
+            /*
+			jQuery.validator.addMethod('compareIt',
+				function(value, element, params) {
+					if (parseInt(value) >= params.minpercentage && parseInt(value) <= params.maxpercentage)
+						return true;
+					else
+						return false;
+				},
+				'');
+			jQuery.validator.unobtrusive.adapters.add('percentagerange',
+				['minpercentage', 'maxpercentage'],
+				function(options) {
+					options.rules['compareIt'] = options.params;
+					options.messages['compareIt'] = options.message;
+				});*/
+		    
+			jQuery.validator.addMethod('qapercentage', function (value, element, params) {
+			    if (!$("#paneQaPercentage").is(":visible")) return true;
+			    if ($("#paneQaPercentage").is(":visible") && $.trim(value) == "") return false;
+
+			    var regExp = /^\d{1,3}?$/;
+
+			    if (!regExp.test(value)) return false;
+
+			    var intVal = parseInt(value, 10);
+
+			    if (intVal > 100 || intVal < 0)
+			        return false;
+
+			    return true;
+			}, '');
+
+			jQuery.validator.unobtrusive.adapters.add('qapercentage', {}, function (options) {
+			    options.rules['qapercentage'] = true;
+			    options.messages['qapercentage'] = options.message;
+			});
+
+			jQuery.validator.addMethod('qacustomfield', function (value, element, params) {
+			    if (!$("#paneQaCustomField").is(":visible")) return true;
+			    if ($("#paneQaCustomField").is(":visible") && $.trim(value) == "") return false;
+
+			    return true;
+			}, '');
+
+			jQuery.validator.unobtrusive.adapters.add('qacustomfield', {}, function (options) {
+			    options.rules['qacustomfield'] = true;
+			    options.messages['qacustomfield'] = options.message;
+			});
+			
+			jQuery.validator.addMethod('correctlistemails', function (value, element, params) {
+				var regExp = /^(([a-z0-9_-]+\.)*[a-z0-9_-]+@@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6})(,(([a-z0-9_-]+\.)*[a-z0-9_-]+@@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}))*$/;
+				return regExp.test(value);
+			}, '');
+
+			jQuery.validator.unobtrusive.adapters.add('emailslist', {}, function (options) {
+				options.rules['correctlistemails'] = true;
+				options.messages['correctlistemails'] = options.message;
+			});
+		}(jQuery));
+
+		$(document).ready(function() {
+			$(".tip").tooltip({
+				'placement': 'top'
+			});
+		});
+	</script>
+}

@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Entities>
+  <Entity Name="Area" CreateCommand="newArea" ListCommand="listAreas" Root="areas" Element="area">
+    <Property Name="Index" Type="int?" Map="ixArea" Strategy="Integer" />
+    <Property Name="Name" Type="string" Map="sArea" Strategy="String"/>
+    <Property Name="AreaType" Type="int?" Map="nType" Strategy="Integer"  />
+    <Property Name="IndexProject" Type="int?" Map="ixProject" Strategy="Integer"/>
+    <Property Name="ProjectName" Type="string" Map="sProject" Strategy="String" />
+    <Property Name="IndexPersonOwner" Type="int?" Map="ixPersonOwner" Strategy="Integer"/>
+    <Property Name="PersonOwnerName" Type="string" Map="sPersonOwner" Strategy="String"/>
+    <Property Name="Doc" Type="int?" Map="cDoc" Strategy="Integer"/>
+  </Entity>
+  <Entity Name="FixFor" CreateCommand="newFixFor" ListCommand="listFixFors" Root="fixfors" Element="fixfor">
+    <Property Name="Index" Map="ixFixFor" Type="int?" Strategy="Integer"/>
+    <Property Name="Name" Type="string" Map="sFixFor" Strategy="String"/>
+    <Property Name="Deleted" Type="bool" Map="fDeleted" Strategy="Boolean"/>
+    <Property Name="ReallyDeleted" Type="bool" Map="fReallyDeleted" Strategy="Boolean"/>
+    <Property Name="Date" Type="DateTime?" Map="dt" Strategy="DateTime"/>
+    <Property Name="DateStart" Type="DateTime?" Map="dtStart" Strategy="DateTime"/>
+    <Property Name="DateRelease" Type="DateTime?" Map="dtRelease" Strategy="DateTime"/>
+    <Property Name="IndexProject" Type="int?" Map="ixProject" Strategy="Integer"/>
+    <Property Name="ProjectName" Type="string" Map="sProject" Strategy="String" />
+    <Property Name="Note" Type="string" Map="sStartNote" Strategy="String" />
+    <Property Name="SetIndexFixForDependency" Type="int?" Map="setixFixForDependency" Strategy="Integer"/>
+    <Property Name="Assignable" Type="bool" Map="fAssignable" Strategy="Boolean"/>
+  </Entity>
+  <Entity Name="Status" CreateCommand="" ListCommand="listStatuses" Element="status" Root="statuses">
+    <Property Name="Name" Type="string" Map="sStatus" Strategy="String"/>
+    <Property Name="Index" Type="int?" Map="ixStatus" Strategy="Integer" />
+    <Property Name="IndexCategory" Type="int?" Map="ixCategory" Strategy="Integer" />
+    <Property Name="Order" Type="int?" Map="iOrder" Strategy="Integer" />
+    <Property Name="Resolved" Type="bool" Map="fResolved" Strategy="Boolean" />
+    <Property Name="Deleted" Type="bool" Map="fDeleted" Strategy="Boolean" />
+    <Property Name="WorkDone" Type="bool" Map="fWorkDone" Strategy="Boolean" />
+    <Property Name="Duplicate" Type="bool" Map="fDuplicate" Strategy="Boolean" />
+  </Entity>
+  <Entity Name="Filter" CreateCommand="" ListCommand="listFilters" Root="filters" Element="filter">
+    <Property Name="Name" Map="sName" Type="string" Strategy="String"/>
+    <Property Name="FilterTypeName" Map="type" Type="string" Strategy="String"/>
+    <Property Name="Content" Map="sFilter" Type="string" Strategy="String"/>
+    <Property Name="Status" Map="status" Type="string" Strategy="String"/>
+  </Entity>
+  <Entity Name="Mailbox" CreateCommand="" ListCommand="listMailboxes" Root="mailboxes" Element="mailbox">
+    <Property Name="Index" Type="int?" Map="ixMailbox" Strategy="Integer"/>
+    <Property Name="Email" Type="string" Map="sEmail" Strategy="String"/>
+    <Property Name="EmailUser" Type="string" Map="sEmailUser" Strategy="String"/>
+    <Property Name="Template" Type="string" Map="sTemplate" Strategy="String"/>
+  </Entity>
+  <Entity Name="Person" CreateCommand="" ListCommand="listPeople" Root="people" Element="person">
+    <Property Name="Index" Type="int?" Map="ixPerson" Strategy="Integer"/>
+    <Property Name="Email" Type="string" Map="sEmail" Strategy="String"/>
+    <Property Name="From" Type="string" Map="sFrom" Strategy="String"/>
+    <Property Name="Name" Type="string" Map="sFullName" Strategy="String"/>
+    <Property Name="Community" Type="bool" Map="fCommunity" Strategy="Boolean"/>
+    <Property Name="Administrator" Type="bool" Map="fAdministrator" Strategy="Boolean"/>
+    <Property Name="Virtual" Type="bool" Map="fVirtual" Strategy="Boolean"/>
+    <Property Name="Notify" Type="bool" Map="fNotify" Strategy="Boolean"/>
+    <Property Name="Homepage" Type="string" Map="sHomepage" Strategy="String"/>
+    <Property Name="Locale" Type="string" Map="sLocale" Strategy="String"/>
+    <Property Name="Language" Type="string" Map="sLanguage" Strategy="String"/>
+    <Property Name="TimeZoneKey" Type="string" Map="sTimeZoneKey" Strategy="String"/>
+    <Property Name="LdapUserId" Type="string" Map="sLDAPUid" Strategy="String"/>
+    <Property Name="PaletteExpanded" Type="bool" Map="fPaletteExpanded" Strategy="Boolean"/>
+    <Property Name="RecurseBugChildren" Type="bool" Map="fRecurseBugChildren" Strategy="Boolean"/>
+    <Property Name="DateLastActivity" Type="DateTime?" Map="dtLastActivity" Strategy="DateTime"/>
+    <Property Name="IndexBugWorkingOn" Type="int?" Map="ixBugWorkingOn" Strategy="Integer"/>
+  </Entity>
+  <Entity Name="Priority" CreateCommand="" ListCommand="listPriorities" Root="priorities" Element="priority">
+    <Property Name="Index" Type="int?" Map="ixPriority" Strategy="Integer"/>
+    <Property Name="Name" Type="string" Map="sPriority" Strategy="String"/>
+    <Property Name="Default" Type="bool" Map="fDefault" Strategy="Boolean"/>
+  </Entity>
+  <Entity Name="Project" CreateCommand="newProject" ListCommand="listProjects" Root="projects" Element="project">
+    <Property Name="Index" Type="int?" Map="ixProject" Strategy="Integer"/>
+    <Property Name="Name" Type="string" Map="sProject" Strategy="String"/>
+    <Property Name="IndexOwner" Type="int?" Map="ixPersonowner" Strategy="Integer"/>
+    <Property Name="IndexPersonPrimaryContact" Type="int?" Map="ixPersonPrimaryContact" Strategy="Integer"/>
+    <Property Name="Email" Type="string" Map="sEmail" Strategy="String"/>
+    <Property Name="Phone" Type="string" Map="sPhone" Strategy="String"/>
+    <Property Name="Inbox" Type="bool" Map="fInbox" Strategy="Boolean"/>
+    <Property Name="Deleted" Type="bool" Map="fDeleted" Strategy="Boolean"/>
+    <Property Name="IndexWorkflow" Type="int?" Map="ixWorkFlow" Strategy="Integer"/>
+  </Entity>
+  <Entity Name="Category" CreateCommand="" ListCommand="listCategories" Element="category" Root="categories">
+    <Property Name="Deleted" Type="bool" Map="fDeleted" Strategy="Boolean"/>
+    <Property Name="ScheduleItem" Type="bool" Map="fScheduleItem" Strategy="Boolean"/>
+    <Property Name="Order" Type="int?" Map="iOrder" Strategy="Integer"/>
+    <Property Name="Index" Type="int?" Map="ixCategory" Strategy="Integer"/>
+    <Property Name="IndexAttachementIcon" Type="int?" Map="ixAttachmentIcon" Strategy="Integer"/>
+    <Property Name="IndexStatusDefault" Type="int?" Map="ixStatusDefault" Strategy="Integer"/>
+    <Property Name="IconIndex" Type="int?" Map="nIconType" Strategy="Integer"/>
+    <Property Name="Name" Type="string" Map="sCategory" Strategy="String"/>
+    <Property Name="NamePlural" Type="string" Map="sPlural" Strategy="String"/>
+  </Entity>
+  <Entity Name="Case" CreateCommand="new" ListCommand="" Element="case" Root="cases">
+    <Property Name="Index" Type="int?" Map="ixBug" Strategy="Integer"/>
+    <Property Name="IndexParent" Type="int?" Map="ixParent" Strategy="Integer"/>
+    <Property Name="IndexProject" Type="int?" Map="ixProject" Strategy="Integer"/>
+    <Property Name="IndexArea" Type="int?" Map="ixArea" Strategy="Integer"/>
+    <Property Name="IndexStatus" Type="int?" Map="ixStatus" Strategy="Integer"/>
+    <Property Name="IndexPriority" Type="int?" Map="ixPriority" Strategy="Integer"/>
+    <Property Name="IndexFixFor" Type="int?" Map="ixFixFor" Strategy="Integer"/>
+    <Property Name="IndexCategory" Type="int?" Map="ixCategory" Strategy="Integer"/>
+    <Property Name="IndexPersonAssignedTo" Type="int?" Map="ixPersonAssignedTo" Strategy="Integer"/>
+    <Property Name="IndexPersonOpenedBy" Type="int?" Map="ixPersonOpenedBy" Strategy="Integer"/>
+    <Property Name="IndexPersonResolvedBy" Type="int?" Map="ixPersonResolvedBy" Strategy="Integer"/>
+    <Property Name="IndexPersonClosedBy" Type="int?" Map="ixPersonClosedBy" Strategy="Integer"/>
+    <Property Name="IndexPersonLastEditedBy" Type="int?" Map="ixPersonLastEditedBy" Strategy="Integer"/>
+    <Property Name="Title" Type="string" Map="sTitle" Strategy="String"/>
+    <Property Name="FixForName" Type="string" Map="sFixFor" Strategy="String"/>
+    <Property Name="AreaName" Type="string" Map="sArea" Strategy="String"/>
+    <Property Name="ProjectName" Type="string" Map="sProject" Strategy="String"/>
+    <Property Name="PriorityName" Type="string" Map="sPriority" Strategy="String"/>
+    <Property Name="HoursOriginalEstimate" Type="decimal?" Map="hrsOrigEst" Strategy="Decimal"/>
+    <Property Name="HoursCurrentEstimate" Type="decimal?" Map="hrsCurrEst" Strategy="Decimal"/>
+    <Property Name="HoursElapsed" Type="decimal?" Map="hrsElapsed" Strategy="Decimal"/>
+    <Property Name="TestEstimate" Type="int?" Map="plugin_customfields_at_fogcreek_com_testxestimatexxinxminutesxu5a" Strategy="Integer" />
+    <Property Name="DateOpened" Type="DateTime?" Map="dtOpened" Strategy="DateTime"/>
+    <Property Name="DateResolved" Type="DateTime?" Map="dtResolved" Strategy="DateTime"/>
+    <Property Name="DateClosed" Type="DateTime?" Map="dtClosed" Strategy="DateTime"/>
+    <Property Name="DateDue" Type="DateTime?" Map="dtDue" Strategy="DateTime"/>
+    <Property Name="DateLastUpdated" Type="DateTime?" Map="dlLastUpdated" Strategy="DateTime"/>
+    <Property Name="IndexBugLastEvent" Type="int?" Map="ixBugEventLatest" Strategy="Integer"/>
+    <Property Name="IndexBugEventLastView" Type="int?" Map="ixBugEventLastView" Strategy="Integer"/>
+    <Property Name="IndexBugChildren" Type="IEnumerable&lt;int&gt;" Map="ixBugChildren" Strategy="IntegerList"/>
+    <Property Name="Operations" Type="List&lt;string&gt;" Map="Operations" Strategy="StringList"/>
+    <Property Name="Tags" Type="List&lt;string&gt;" Map="sTags" Strategy="StringList"/>
+    <Property Name="IsOpen" Type="bool" Map="fOpen" Strategy="Boolean"/>
+    <Property Name="WikiPageId" Type="string" Map="plugin_customfields_at_fogcreek_com_wikixnumberq6b" Strategy="String"/>
+  </Entity>
+</Entities>

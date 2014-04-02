@@ -1,0 +1,33 @@
+﻿@model FogBugzPd.Web.Models.Project.AdvancedDashboardViewModel
+@{
+    ViewBag.Title = "Advanced Dashboard";
+    Layout = "~/Views/Project/_Layout.cshtml";
+}
+
+@section Js
+{
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("#loader").height($("#project-content").height());
+			if ($("#loader").height() == 0)
+				$("#loader").height(200);
+			$("#loader").show();
+
+			$.post(resolveUrl("~/Project/AsyncAdvancedDashboard"),
+            {
+            	projectId: "@Model.ProjectId",
+				milestoneId: "@Model.MilestoneId"
+            },
+            function (result) {
+            	$("#dashboard-async-content").empty();
+            	$("#dashboard-async-content").html(result);
+            	$("#dashboard-async-content").show();
+            	$("#loader").hide();
+            }, "HTML");
+		});
+	</script>
+}
+
+<div id="dashboard-async-content">
+</div>
+

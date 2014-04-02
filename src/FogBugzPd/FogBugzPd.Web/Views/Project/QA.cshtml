@@ -1,0 +1,343 @@
+﻿	@using FogBugzPd.Core
+@using FogBugzPd.Core.FogBugzApi.Enums
+@using FogBugzPd.Core.FogBugzApi.Types
+@using FogBugzPd.Web
+@using FogBugzPd.Web.Utils
+@using FogBugzPd.Web.Models.Project
+@using FogBugzPd.Web._App_Code.Extensions
+@using FogBugzPd.Web._App_Code.Utils
+@model QAViewModel
+@{
+	ViewBag.Title = "QA";
+	Layout = MilestoneUtils.CheckNotStarted(Model.ProjectId, Model.MilestoneId, Model.SubProjectParentCaseId) ? "~/Views/Project/_Layout.cshtml" : "~/Views/Project/_LayoutNotStarted.cshtml";
+}
+<div class="row">
+	<div class="span8 well">
+		<h3>
+			Cases</h3>
+		<div class="row">
+			<div class="span3">
+				<table class="table table-striped stat">
+					<tr>
+						<td>
+							Total:
+						</td>
+						<td>
+							@Html.FogBugzCasesLink(Model.CasesTotal, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId }, new { target = "_blank" })
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Ready to be tested:
+						</td>
+						<td>
+							@Html.FogBugzCasesLink(Model.CasesReadyToBeTested, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId, StatusId = FbAccountContext.Current.Settings.ResolvedVerifiedStatusId/*, Status = CaseStatus.Resolved */}, new { target = "_blank" })
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Closed:
+						</td>
+						<td>
+							@Html.FogBugzCasesLink(Model.CasesClosed, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId, Status = CaseStatus.Closed/*, Tag = Model.Tag */}, new { target = "_blank" })
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="offset1 span4">
+				<div id="cases-chart" style="width: 100%; height: 220px;">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="span8 well" style="float: right;">
+		<h3>
+			Times</h3>
+		<div class="row">
+			<div class="span4">
+				<table class="table table-striped stat">
+					<tr>
+						<td>
+							Total testing time:
+						</td>
+						<td>
+							@Model.TotalTestingTime.FormatDuration()
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Remaining testing time:
+						</td>
+						<td>
+							@Model.RemainingTestingTime.FormatDuration()
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Ready to be tested:
+						</td>
+						<td>
+							@Model.ReadyToBeTestedTime.FormatDuration()
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="span4">
+				<div id="testing-time-chart" style="width: 100%; height: 220px;">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@if (Model.TestRailPlansSummary != null)
+{
+	<div class="row">
+		<div class="span12 well">
+			<h3>
+				Test Rail</h3>
+			<div class="row">
+				<div class="span4">
+					<table class="table table-striped stat">
+						<tr>
+							<td>
+								Passed:
+							</td>
+							<td>
+								@Model.TestRailPlansSummary.PassedCount (@(Model.TestRailPlansSummary.PassedPercentage)%)
+							</td>
+							<td>
+								@Model.TestRailPlansSummary.PassedEstimate.FormatDurationMin() (@(Model.TestRailPlansSummary.PassedEstimatePercentage)%)
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Blocked:
+							</td>
+							<td>
+								@Model.TestRailPlansSummary.BlockedCount (@(Model.TestRailPlansSummary.BlockedPercentage)%)
+							</td>
+							<td>
+								@Model.TestRailPlansSummary.BlockedEstimate.FormatDurationMin() (@(Model.TestRailPlansSummary.BlockedEstimatePercentage)%)
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Retest:
+							</td>
+							<td>
+								@Model.TestRailPlansSummary.RetestCount (@(Model.TestRailPlansSummary.RetestPercentage)%)
+							</td>
+							<td>
+								@Model.TestRailPlansSummary.RetestEstimate.FormatDurationMin() (@(Model.TestRailPlansSummary.RetestEstimatePercentage)%)
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Failed:
+							</td>
+							<td>
+								@Model.TestRailPlansSummary.FailedCount (@(Model.TestRailPlansSummary.FailedPercentage)%)
+							</td>
+							<td>
+								@Model.TestRailPlansSummary.FailedEstimate.FormatDurationMin() (@(Model.TestRailPlansSummary.FailedEstimatePercentage)%)
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Untested:
+							</td>
+							<td>
+								@Model.TestRailPlansSummary.UntestedCount (@(Model.TestRailPlansSummary.UntestedPercentage)%)
+							</td>
+							<td>
+								@Model.TestRailPlansSummary.UntestedEstimate.FormatDurationMin() (@(Model.TestRailPlansSummary.UntestedEstimatePercentage)%)
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="offset1 span4">
+					<div id="testrail-chart" style="width: 100%; height: 220px;">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div class="row" style="padding-left: 19px;">
+	<h3 style="padding-left: 19px;">
+		Testers Progress
+	</h3>
+	@if (Model.Items.Any())
+	{
+		<table class="table table-striped sortable" id="sortable-table">
+			<thead>
+				<tr>
+					<th style="width: 24%;">
+						Tester Name
+					</th>
+					<th style="width: 24%;">
+						Cases to Verify
+					</th><th style="width: 20%;">
+						     Development Time
+					     </th>
+					<th style="width: 24%;">
+						Estimated Testing Time @(FbAccountContext.Current.Settings.AllowQaEstimates?"":String.Format("({0}%)",FbAccountContext.Current.Settings.QaPercentage))
+					</th>
+				</tr>
+			</thead>
+			<tbody style ="max-height: 180px ;overflow-y: auto">
+				@foreach (var info in Model.Items)
+				{
+					<tr>
+						<td style="width: 24%;">
+							@info.TesterName
+						</td>
+						<td style="width: 24%;">
+							@Html.FogBugzCasesLink(info.CaseToVerify, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId, PersonName = info.TesterName, Status = CaseStatus.Resolved }, new { target = "_blank" })
+						</td>
+						<td style="width: 20%;">
+							<span>@info.DevelopmentTime.FormatDuration()</span>
+						</td>
+						<td style="width: 24%;">
+							<span>@info.Estimate.FormatDuration()</span>
+							@Html.Hidden("value", info.Estimate)
+						</td>
+					</tr>
+				}
+			</tbody>
+			<tfoot>
+				<tr>
+					<td style="width: 24%;">
+					</td>
+					<td style="width: 24%;">
+						@Model.Items.Sum(i => i.CaseToVerify)
+					</td>
+					<td style="width: 20%;">
+						@Model.Items.Sum(i => i.DevelopmentTime).FormatDuration()
+					</td>
+					<td style="width: 24%;">
+						@Model.Items.Sum(i => i.Estimate).FormatDuration()
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	}
+	else
+	{
+		<span>Currently there are no ready to test or verified cases. </span>
+
+	}
+</div>
+<div style="float:right;" class="mscache">
+	@Html.RefreshData(Model.MsCache.CreatedAt, Model.ProjectId, Model.MilestoneId, Model.SubProjectParentCaseId, MsCacheDataType.FogBugz_CaseSet)
+</div>
+<div style="clear:both;"></div>
+
+@section Js
+{
+	<script type="text/javascript" src="@Url.Content("~/Content/js/jquery.tablesorter.min.js")"></script>
+	<script type="text/javascript">
+		function showTooltip(x, y, contents) {
+			$('<div id="tooltip">' + contents + '</div>').css({
+				position: 'absolute',
+				display: 'none',
+				top: y + 5,
+				left: x + 5,
+				border: '1px solid #fdd',
+				padding: '2px',
+				'background-color': '#fee',
+				opacity: 0.80
+			}).appendTo("body").fadeIn(200);
+		}
+
+		$(document).ready(function() {
+			var pieChartHover = function(event, pos, item) {
+				if (item) {
+					$("#tooltip").remove();
+					var percent = parseFloat(item.series.percent).toFixed(2);
+					showTooltip(pos.pageX, pos.pageY, item.series.label + "<br/>" + percent + "%");
+				} else {
+					$("#tooltip").remove();
+				}
+			};
+
+			var casesData = [
+				{ label: 'Active Cases', data: @(Model.CasesActive) },
+                { label: 'Ready to be tested', data: @(Model.CasesReadyToBeTested) },
+			    { label: 'Verified Cases (Closed)', data: @(Model.CasesClosed) }
+            ];
+
+			var testingTimeData = [
+				{ label: 'Elapsed time', data: @(Model.TotalTestingTime - Model.RemainingTestingTime) },
+				{ label: 'Remaining time', data: @(Model.RemainingTestingTime) }
+			];
+
+			@if (Model.TestRailPlansSummary != null)
+   {
+				<text>
+				var testrailData = [
+					{ label: "Passed", data: @(Model.TestRailPlansSummary.PassedCount) },
+					{ label: "Blocked", data: @(Model.TestRailPlansSummary.BlockedCount) },
+					{ label: "Retest", data: @(Model.TestRailPlansSummary.RetestCount) },
+					{ label: "Failed", data: @(Model.TestRailPlansSummary.FailedCount) },
+					{ label: "Untested", data: @(Model.TestRailPlansSummary.UntestedCount) }
+				];
+				</text>
+   }
+
+			var pieOpts = {
+				series: {
+					pie: {
+						show: true,
+						radius: 1,
+						label: {
+							show: false
+						},
+						highlight: {
+							opacity: 0
+						}
+					}
+				},
+				legend: {
+					show: true
+				},
+				grid: {
+					hoverable: true
+				}
+			};
+
+			$.plot($("#cases-chart"), casesData, pieOpts);
+			$.plot($("#testing-time-chart"), testingTimeData, pieOpts);
+
+			$("#cases-chart").bind("plothover", pieChartHover);
+			$("#testing-time-chart").bind("plothover", pieChartHover);
+			
+			@if (Model.TestRailPlansSummary != null)
+   {
+				<text>
+				
+				pieOpts.colors = ["#95D96D", "#D0D0D0", "#EDEE80", "#F1888F", "#EAEAEA"];
+
+				$.plot($("#testrail-chart"), testrailData, pieOpts);
+				$("#testrail-chart").bind("plothover", pieChartHover);
+				
+				</text>
+			}
+
+			$("#sortable-table").tablesorter({
+				sortList: [[0, 0]],
+				onRenderHeader: function() {
+					this.append('<i class="icon-sort"></i>');
+				},
+				textExtraction: function(node) {
+					var hidden = $(node).find("input[type=hidden]")[0];
+					if (hidden != undefined)
+						return $(hidden).val();
+					return node.innerText;
+				}
+			});
+		});
+	</script>
+}

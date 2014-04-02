@@ -1,0 +1,482 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7479077B-D96B-410A-8C94-8253578D8045}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FogBugzPd.Web</RootNamespace>
+    <AssemblyName>FogBugzPd.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <TargetFrameworkProfile />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Stable|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\FogBugzPm.Web.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>$(DevEnvDir)\..\..\Team Tools\Static Analysis Tools\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>$(DevEnvDir)\..\..\Team Tools\Static Analysis Tools\FxCop\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Dev1|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\FogBugzPm.Web.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>$(DevEnvDir)\..\..\Team Tools\Static Analysis Tools\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>$(DevEnvDir)\..\..\Team Tools\Static Analysis Tools\FxCop\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Dev|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\FogBugzPm.Web.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>$(DevEnvDir)\..\..\Team Tools\Static Analysis Tools\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>$(DevEnvDir)\..\..\Team Tools\Static Analysis Tools\FxCop\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <Prefer32Bit>false</Prefer32Bit>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Prod|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\FogBugzPm.Web.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>$(DevEnvDir)\..\..\Team Tools\Static Analysis Tools\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>$(DevEnvDir)\..\..\Team Tools\Static Analysis Tools\FxCop\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="ErrorLog.ApiClient">
+      <HintPath>..\..\..\lib\ErrorLog\ErrorLog.ApiClient.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\lib\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MiniProfiler, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\MiniProfiler.2.1.0\lib\net40\MiniProfiler.dll</HintPath>
+    </Reference>
+    <Reference Include="MiniProfiler.EntityFramework">
+      <HintPath>..\..\..\lib\MiniProfiler.EF.2.1.0\lib\net40\MiniProfiler.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="NewRelic.Api.Agent">
+      <HintPath>..\..\..\lib\NewRelic.Azure.WebSites.2.10.40.0\lib\NewRelic.Api.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\lib\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.WebPages.Deployment, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\AgentController.cs" />
+    <Compile Include="Controllers\ControllerBase.cs" />
+    <Compile Include="Controllers\FbAccountController.cs" />
+    <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Models\Account\LocalLoginViewModel.cs" />
+    <Compile Include="Models\Account\LoginViewModel.cs" />
+    <Compile Include="Models\FbAccount\SettingViewModel.cs" />
+    <Compile Include="Models\Project\AdvancedDashboardViewModel.cs" />
+    <Compile Include="Models\Project\AsyncAdvancedDashboardViewModel.cs" />
+    <Compile Include="Models\Project\AsyncDashboardNotStartedViewModel.cs" />
+    <Compile Include="Models\Project\DashboardNotStartedViewModel.cs" />
+    <Compile Include="Models\Project\DashboardViewModel.cs" />
+    <Compile Include="Models\Project\AsyncDashboardViewModel.cs" />
+    <Compile Include="Models\Project\ListViewModel.cs" />
+    <Compile Include="Models\Project\MsCacheInfo.cs" />
+    <Compile Include="Models\Project\PriorityViewModel.cs" />
+    <Compile Include="Models\Project\QAViewModel.cs" />
+    <Compile Include="Models\Project\TabsViewModel.cs" />
+    <Compile Include="Models\Project\CaseSetViewModelBase.cs" />
+    <Compile Include="Models\Project\DeveloperViewModel.cs" />
+    <Content Include="App_Data\PublishDir.txt" />
+    <Content Include="Content\img\progress.gif" />
+    <Content Include="Content\js\common.js" />
+    <Content Include="Content\packages\cluetip\images\arrowdown.gif" />
+    <Content Include="Content\packages\cluetip\images\arrowleft.gif" />
+    <Content Include="Content\packages\cluetip\images\arrowright.gif" />
+    <Content Include="Content\packages\cluetip\images\arrowup.gif" />
+    <Content Include="Content\packages\cluetip\images\bl.gif" />
+    <Content Include="Content\packages\cluetip\images\bl.png" />
+    <Content Include="Content\packages\cluetip\images\br.gif" />
+    <Content Include="Content\packages\cluetip\images\br.png" />
+    <Content Include="Content\packages\cluetip\images\darrowdown.gif" />
+    <Content Include="Content\packages\cluetip\images\darrowleft.gif" />
+    <Content Include="Content\packages\cluetip\images\darrowright.gif" />
+    <Content Include="Content\packages\cluetip\images\darrowup.gif" />
+    <Content Include="Content\packages\cluetip\images\rarrowdown.gif" />
+    <Content Include="Content\packages\cluetip\images\rarrowleft.gif" />
+    <Content Include="Content\packages\cluetip\images\rarrowright.gif" />
+    <Content Include="Content\packages\cluetip\images\rarrowup.gif" />
+    <Content Include="Content\packages\cluetip\images\tl.gif" />
+    <Content Include="Content\packages\cluetip\images\tl.png" />
+    <Content Include="Content\packages\cluetip\images\tr.gif" />
+    <Content Include="Content\packages\cluetip\images\tr.png" />
+    <Content Include="Content\packages\cluetip\jquery-1.2.5.min.js" />
+    <Content Include="Content\packages\cluetip\jquery.cluetip.css" />
+    <Content Include="Content\packages\cluetip\jquery.cluetip.js" />
+    <Content Include="Content\packages\cluetip\jquery.dimensions-1.2.js" />
+    <Content Include="Content\packages\cluetip\jquery.dimensions.js" />
+    <Content Include="Content\packages\cluetip\jquery.hoverIntent.js" />
+    <Content Include="Content\packages\cluetip\wait.gif" />
+    <Content Include="newrelic\extensions\CoreInstrumentation.xml" />
+    <Content Include="newrelic\NewRelic.Agent.Core.dll" />
+    <Content Include="newrelic\NewRelic.Profiler.dll" />
+    <Content Include="robots.txt" />
+    <Compile Include="_App_Code\Attributes\DbContextFilterAttribute.cs" />
+    <Compile Include="_App_Code\Const.cs" />
+    <Compile Include="_App_Code\CookieUtils.cs" />
+    <Compile Include="_App_Code\CustomAuthorizeAttribute.cs" />
+    <Compile Include="_App_Code\CustomValidation.cs" />
+    <Compile Include="_App_Code\Extensions\FogBugzHtmlExtensions.cs" />
+    <Compile Include="_App_Code\Extensions\HtmlExtensions.cs" />
+    <Compile Include="_App_Code\Extensions\LabelExtensions.cs" />
+    <Compile Include="_App_Code\Extensions\UrlExtensions.cs" />
+    <Compile Include="_App_Code\Utils\MilestoneUtils.cs" />
+    <Compile Include="_App_Code\Utils\MiniProfilerUtils.cs" />
+    <Compile Include="_App_Code\Utils\FogBugzUrlUtils.cs" />
+    <Compile Include="_App_Code\Utils\HtmlGenerationUtils.cs" />
+    <Compile Include="_App_Code\Utils\StringUtils.cs" />
+    <Compile Include="_App_Code\Utils\TimeUtils.cs" />
+    <Compile Include="_App_Code\Utils\UrlUtils.cs" />
+    <Compile Include="_App_Code\UserContext.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="_App_Code\Utils\ErrorUtils.cs" />
+    <Compile Include="_App_Code\Utils\LoginUtils.cs" />
+    <Compile Include="_App_Code\Utils\XStringUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\js\cache.js" />
+    <Content Include="favicon.ico" />
+    <Content Include="Content\css\project.css" />
+    <Content Include="Content\css\style.css" />
+    <Content Include="Content\css\tablesorter.css" />
+    <Content Include="Content\img\loader.gif" />
+    <Content Include="Content\js\additional-methods.min.js" />
+    <Content Include="Content\js\jquery-1.8.2.min.js" />
+    <Content Include="Content\js\jquery.tablesorter.min.js" />
+    <Content Include="Content\js\jquery.validate.min.js" />
+    <Content Include="Content\js\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Content\js\kkcountdown.js" />
+    <Content Include="Content\packages\bootstrap\css\bootstrap-responsive.css" />
+    <Content Include="Content\packages\bootstrap\css\bootstrap-responsive.min.css" />
+    <Content Include="Content\packages\bootstrap\css\bootstrap.css" />
+    <Content Include="Content\packages\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Content\packages\bootstrap\img\glyphicons-halflings-white.png" />
+    <Content Include="Content\packages\bootstrap\img\glyphicons-halflings.png" />
+    <Content Include="Content\packages\bootstrap\js\bootstrap.js" />
+    <Content Include="Content\packages\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Content\packages\flot.valuelabels\jquery.flot.valuelabels.js" />
+    <Content Include="Content\packages\flot.valuelabels\plot.css" />
+    <Content Include="Content\packages\flot\API.txt" />
+    <Content Include="Content\packages\flot\examples\ajax.html" />
+    <Content Include="Content\packages\flot\examples\annotating.html" />
+    <Content Include="Content\packages\flot\examples\arrow-down.gif" />
+    <Content Include="Content\packages\flot\examples\arrow-left.gif" />
+    <Content Include="Content\packages\flot\examples\arrow-right.gif" />
+    <Content Include="Content\packages\flot\examples\arrow-up.gif" />
+    <Content Include="Content\packages\flot\examples\basic.html" />
+    <Content Include="Content\packages\flot\examples\graph-types.html" />
+    <Content Include="Content\packages\flot\examples\hs-2004-27-a-large_web.jpg" />
+    <Content Include="Content\packages\flot\examples\image.html" />
+    <Content Include="Content\packages\flot\examples\index.html" />
+    <Content Include="Content\packages\flot\examples\interacting-axes.html" />
+    <Content Include="Content\packages\flot\examples\interacting.html" />
+    <Content Include="Content\packages\flot\examples\layout.css" />
+    <Content Include="Content\packages\flot\examples\multiple-axes.html" />
+    <Content Include="Content\packages\flot\examples\navigate.html" />
+    <Content Include="Content\packages\flot\examples\percentiles.html" />
+    <Content Include="Content\packages\flot\examples\pie.html" />
+    <Content Include="Content\packages\flot\examples\realtime.html" />
+    <Content Include="Content\packages\flot\examples\resize.html" />
+    <Content Include="Content\packages\flot\examples\selection.html" />
+    <Content Include="Content\packages\flot\examples\setting-options.html" />
+    <Content Include="Content\packages\flot\examples\stacking.html" />
+    <Content Include="Content\packages\flot\examples\symbols.html" />
+    <Content Include="Content\packages\flot\examples\thresholding.html" />
+    <Content Include="Content\packages\flot\examples\time.html" />
+    <Content Include="Content\packages\flot\examples\tracking.html" />
+    <Content Include="Content\packages\flot\examples\turning-series.html" />
+    <Content Include="Content\packages\flot\examples\visitors.html" />
+    <Content Include="Content\packages\flot\examples\zooming.html" />
+    <Content Include="Content\packages\flot\excanvas.js" />
+    <Content Include="Content\packages\flot\excanvas.min.js" />
+    <Content Include="Content\packages\flot\FAQ.txt" />
+    <Content Include="Content\packages\flot\jquery.colorhelpers.js" />
+    <Content Include="Content\packages\flot\jquery.flot.crosshair.js" />
+    <Content Include="Content\packages\flot\jquery.flot.fillbetween.js" />
+    <Content Include="Content\packages\flot\jquery.flot.image.js" />
+    <Content Include="Content\packages\flot\jquery.flot.js" />
+    <Content Include="Content\packages\flot\jquery.flot.navigate.js" />
+    <Content Include="Content\packages\flot\jquery.flot.pie.js" />
+    <Content Include="Content\packages\flot\jquery.flot.resize.js" />
+    <Content Include="Content\packages\flot\jquery.flot.selection.js" />
+    <Content Include="Content\packages\flot\jquery.flot.stack.js" />
+    <Content Include="Content\packages\flot\jquery.flot.symbol.js" />
+    <Content Include="Content\packages\flot\jquery.flot.threshold.js" />
+    <Content Include="Content\packages\flot\jquery.js" />
+    <Content Include="Content\packages\flot\LICENSE.txt" />
+    <Content Include="Content\packages\flot\NEWS.txt" />
+    <Content Include="Content\packages\flot\PLUGINS.txt" />
+    <Content Include="Content\packages\flot\README.txt" />
+    <Content Include="Global.asax" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FogbugzPd.Application\FogBugzPd.Application.csproj">
+      <Project>{80a27389-c10e-4c5e-9218-fb6de0dd4500}</Project>
+      <Name>FogBugzPd.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FogBugzPd.Core\FogBugzPd.Core.csproj">
+      <Project>{05596BF9-676D-49AF-94CD-FEAEECBAF6FA}</Project>
+      <Name>FogBugzPd.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FogbugzPd.Infrastructure\FogBugzPd.Infrastructure.csproj">
+      <Project>{D079465C-50D2-4498-96DB-9F1855261CCA}</Project>
+      <Name>FogBugzPd.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FogLampz\FogLampz.csproj">
+      <Project>{B02DD64B-E35F-47ED-AB64-89C640CEF087}</Project>
+      <Name>FogLampz</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestRail.MiniAPI\TestRail.MiniAPI.csproj">
+      <Project>{20ca8888-6af5-4a0c-a565-c44b9e688749}</Project>
+      <Name>TestRail.MiniAPI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\Login.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Project\List.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_TopNavigation.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Project\Priority.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Project\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\AppSettings.config" />
+    <Content Include="Config\ConnectionStrings.config" />
+    <Content Include="Config\Log4net.config" />
+    <None Include="Content\packages\flot\examples\data-eu-gdp-growth-1.json" />
+    <None Include="Content\packages\flot\examples\data-eu-gdp-growth-2.json" />
+    <None Include="Content\packages\flot\examples\data-eu-gdp-growth-3.json" />
+    <None Include="Content\packages\flot\examples\data-eu-gdp-growth-4.json" />
+    <None Include="Content\packages\flot\examples\data-eu-gdp-growth-5.json" />
+    <None Include="Content\packages\flot\examples\data-eu-gdp-growth.json" />
+    <None Include="Content\packages\flot\examples\data-japan-gdp-growth.json" />
+    <None Include="Content\packages\flot\examples\data-usa-gdp-growth.json" />
+    <None Include="Content\packages\flot\Makefile" />
+    <Content Include="Views\Project\QA.cshtml" />
+    <Content Include="Views\Home\Environment.cshtml" />
+    <Content Include="Views\Project\Developer.cshtml" />
+    <Content Include="packages.config" />
+    <Content Include="newrelic\newrelic.config" />
+    <Content Include="newrelic\extensions\extension.xsd">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Home\ContactUs.cshtml" />
+    <Content Include="Views\Project\Index.cshtml" />
+    <Content Include="Views\Project\_AsyncList.cshtml" />
+    <Content Include="Views\Project\Dashboard.cshtml" />
+    <Content Include="Views\Project\_AsyncDashboard.cshtml" />
+    <Content Include="Views\FbAccount\Update.cshtml" />
+    <Content Include="Views\Account\LocalLogin.cshtml" />
+    <Content Include="Views\Project\AdvancedDashboard.cshtml" />
+    <Content Include="Views\Project\_AsyncAdvancedDashboard.cshtml" />
+    <Content Include="Views\Project\DashboardNotStarted.cshtml" />
+    <Content Include="Views\Project\_AsyncDashboardNotStarted.cshtml" />
+    <Content Include="Views\Project\_LayoutNotStarted.cshtml" />
+    <Content Include="Views\Agent\SendDailyDigestEmails.cshtml" />
+    <None Include="Properties\PublishProfiles\Publish to Dir.pubxml" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SingleTenant|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Entech|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>32674</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:32674/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

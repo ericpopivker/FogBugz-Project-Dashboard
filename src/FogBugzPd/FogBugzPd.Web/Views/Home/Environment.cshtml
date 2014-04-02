@@ -1,0 +1,23 @@
+﻿@using FogBugzPd.Core
+@using FogBugzPd.Core.FogBugzApi
+@using FogBugzPd.Web
+@using FogBugzPd.Web.Utils
+@using FogLampz
+@{
+    ViewBag.Title = "Environment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if(UserContext.IsLoggedIn)  
+{ 
+    <span>Current fogbugz token: @FogBugzGateway.GetToken()</span> <br/><br/>
+}
+
+Environment.ProcessorCount: @Environment.ProcessorCount<br/><br/>
+
+
+Items in cache: @(MsCache.Count()) @Html.ActionLink("Clear Cache", "ClearCache")<br/><br/>
+Test exception: @Html.ActionLink("Test Exception","TestException")<br/><br/>
+Send Test Email: @Html.ActionLink("Send","TestEmail")<br/><br/>
+Run Send Daily Digest Email Job: @Html.ActionLink("Run","RunDailyDigestJob")<br/><br/>

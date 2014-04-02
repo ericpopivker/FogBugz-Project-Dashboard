@@ -1,0 +1,212 @@
+﻿@using FogBugzPd.Core
+@using FogBugzPd.Core.FogBugzApi.Enums
+@using FogBugzPd.Core.FogBugzApi.Types
+@using FogBugzPd.Web
+@using FogBugzPd.Web.Models.Project
+@using FogBugzPd.Web.Utils
+@using FogBugzPd.Web._App_Code.Utils
+@using ChartItem = FogBugzPd.Web.Models.Project.ChartItem
+@using FogBugzPd.Web._App_Code.Extensions
+@model PriorityViewModel
+@{
+	ViewBag.Title = "Cases by Priority";
+	Layout = MilestoneUtils.CheckNotStarted(Model.ProjectId, Model.MilestoneId, Model.SubProjectParentCaseId) ? "~/Views/Project/_Layout.cshtml" : "~/Views/Project/_LayoutNotStarted.cshtml";
+}
+<div id="chart-types" class="btn-group">
+	@foreach (ChartItem chart in Model.Charts)
+	{
+		<button value="chart_@((int) chart.Type)_data" class="btn">
+			@chart.Type.GetStringValue()
+		</button>
+	}
+</div>
+<br />
+<br />
+<div id="project-chart" style="width: 100%; height: 300px; margin-bottom: 20px;">
+</div>
+<table class="table table-hover table-striped scrollable" id="priority-table">
+	<thead>
+		<tr>
+			<th colspan="2">
+			</th>
+			<th colspan="4">
+				Estimates (Active only)
+			</th>
+			<th colspan="4">
+				Status
+			</th>
+		</tr>
+		<tr>
+			<th>
+				Priority
+			</th>
+			<th>
+				Total
+			</th>
+			<th>
+				Without
+			</th>
+			<th>
+				Estimated
+			</th>
+			<th>
+				Elapsed
+			</th>
+			<th>
+				Remaining
+			</th>
+			<th>
+				Active
+			</th>
+			<th>
+				Resolved
+			</th>
+			<th>
+				Verified
+			</th>
+			<th>
+				Closed
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.Items)
+		{
+			<tr>
+				<td>
+					@item.PriorityId - @item.Priority
+				</td>
+				<td>
+					@Html.FogBugzCasesLink(item.Total, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId, PriorityId = item.PriorityId }, new { target = "_blank" })
+				</td>
+				<td>
+					@Html.FogBugzCasesLink(item.WithoutEstimate, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId, PriorityId = item.PriorityId, HasEstimate = false, HasChildren = false, Status = CaseStatus.Active }, new { target = "_blank" })
+				</td>
+				<td>
+					<span>@item.EstimatedTime.FormatDuration()</span>
+					@Html.Hidden("value", item.EstimatedTime)
+				</td>
+				<td>
+					<span>@item.ElapsedTime.FormatDuration()</span>
+					@Html.Hidden("value", item.ElapsedTime)
+				</td>
+				<td>
+					<span>@item.RemainingTime.FormatDuration()</span>
+					@Html.Hidden("value", item.RemainingTime)
+				</td>
+				<td>
+					@Html.FogBugzCasesLink(item.ActiveCount, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId, PriorityId = item.PriorityId, Status = CaseStatus.Active }, new { target = "_blank" })
+				</td>
+				<td>
+					@Html.FogBugzCasesLink(item.ResolvedCount, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId, PriorityId = item.PriorityId, Status = CaseStatus.Resolved }, new { target = "_blank" })
+				</td>
+				<td>
+					@Html.FogBugzCasesLink(item.VerifiedCount, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId, PriorityId = item.PriorityId, StatusId = FbAccountContext.Current.Settings.ResolvedVerifiedStatusId }, new { target = "_blank" })
+				</td>
+				<td>
+					@Html.FogBugzCasesLink(item.ClosedCount, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId, PriorityId = item.PriorityId, Status = CaseStatus.Closed }, new { target = "_blank" })
+				</td>
+			</tr>
+		}
+	</tbody>
+	<tfoot>
+		<tr>
+			<td>
+			</td>
+			<td>
+				@Html.FogBugzCasesLink(Model.Items.Sum(i => i.Total), new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId}, new { target = "_blank" })
+			</td>
+			<td>
+				@Html.FogBugzCasesLink(Model.Items.Sum(i => i.WithoutEstimate), new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId, HasEstimate = false }, new { target = "_blank" })
+			</td>
+			<td>@Model.Items.Sum(i => i.EstimatedTime).FormatDuration()
+			</td>
+			<td>@Model.Items.Sum(i => i.ElapsedTime).FormatDuration()
+			</td>
+			<td>@Model.Items.Sum(i => i.RemainingTime).FormatDuration()
+			</td>
+			<td>
+				@Html.FogBugzCasesLink(Model.Items.Sum(i => i.ActiveCount), new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId, Status = CaseStatus.Active }, new { target = "_blank" })
+			</td>
+			<td>
+				@Html.FogBugzCasesLink(Model.Items.Sum(i => i.ResolvedCount), new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId, Status = CaseStatus.Resolved }, new { target = "_blank" })
+			</td>
+			<td>
+				@Html.FogBugzCasesLink(Model.Items.Sum(i => i.VerifiedCount), new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId, StatusId = FbAccountContext.Current.Settings.ResolvedVerifiedStatusId }, new { target = "_blank" })
+			</td>
+			<td>
+				@Html.FogBugzCasesLink(Model.Items.Sum(i => i.ClosedCount), new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId, Status = CaseStatus.Closed }, new { target = "_blank" })
+			</td>
+		</tr>
+	</tfoot>
+</table>
+<div style="float:right;" class="mscache">
+	@Html.RefreshData(Model.MsCache.CreatedAt, Model.ProjectId, Model.MilestoneId, Model.SubProjectParentCaseId, MsCacheDataType.FogBugz_CaseSet)
+</div>
+<div style="clear:both;"></div>
+@section Js
+{
+	<script type="text/javascript" src="@Url.Content("~/Content/js/jquery.tablesorter.min.js")"></script>
+	<script type="text/javascript">
+		@foreach (ChartItem chart in Model.Charts)
+  {
+			@:var chart_@((int)chart.Type)_data = @Html.Raw(chart.Data);
+		}
+		
+		function FillPlot(data) {
+			var series = data.Series;
+			var ticks = data.Ticks;
+
+			$.plot($("#project-chart"), series, {
+				series: {
+					stack: false,
+					bars: { show: true, fill: 1,lineWidth: 0,fillColors:[{opacity:1}] }
+				},
+				xaxis: {
+					ticks: ticks
+				},
+				colors: ["#FAD232", "#BDDB4F", "#8CD164", "#51A351"]
+			});
+		}
+
+
+		$(document).ready(function() {
+
+			$("#chart-types button").click(function() {
+				$.each($("#chart-types button"), function(i, v) {
+					$(v).removeClass("active");
+				});
+				$(this).addClass("active");
+				var data = eval($(this).val());
+				FillPlot(data);
+			});
+
+			$("#priority-table").tablesorter({
+				sortList: [[0, 0]],
+				headers:{
+					0:{
+						sorter: false
+					},
+					1:{
+						sorter: false
+					},
+					2:{
+						sorter: false
+					}
+				},
+				onRenderHeader: function() {
+					this.append('<i class="icon-sort"></i>');
+				},
+				textExtraction: function(node) {
+					var hidden = $(node).find("input[type=hidden]")[0];
+					if (hidden != undefined)
+						return $(hidden).val();
+					return node.innerText;
+				}
+			});
+
+			$("#chart-types button")[1].click();
+
+		});
+	</script>
+}

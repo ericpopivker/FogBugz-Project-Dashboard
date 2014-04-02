@@ -1,0 +1,24 @@
+﻿@using FogBugzPd.Web.Utils
+
+<div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+        <div class="container">
+            @{
+                var currentUrl = Request.Url.AbsoluteUri;
+                var homeUrl = Url.Action("List", "Project", null);
+            }
+
+			<ul class="nav">
+				<li class="@(currentUrl.Contains(homeUrl) ? "active" : "")"><a href="@homeUrl">Home</a>
+				</li>
+			</ul>
+
+            @Html.ActionLink("Logout", "Logout", "Account", null, new { @class = "btn btn-primary", style = "float:right" })
+            
+            @if (!EnvironmentConfig.HideSettings)
+            {
+                @Html.ActionLink("Settings", "Settings", "FbAccount", null, new {@class = "btn btn-primary", style = "float:right;margin-right:5px;"});
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,256 @@
+﻿@using FogBugzPd.Application.Extensions
+@using FogBugzPd.Core
+@using FogBugzPd.Core.FogBugzApi.Enums
+@using FogBugzPd.Core.FogBugzApi.Types
+@using FogBugzPd.Web
+@using FogBugzPd.Web.Models.Project
+@using FogBugzPd.Web.Utils
+@using FogBugzPd.Web._App_Code.Utils
+@using ChartItem = FogBugzPd.Web.Models.Project.ChartItem
+@using FogBugzPd.Web._App_Code.Extensions
+@model DeveloperViewModel
+@{
+	ViewBag.Title = "Cases by Developer";
+	Layout = MilestoneUtils.CheckNotStarted(Model.ProjectId, Model.MilestoneId, Model.SubProjectParentCaseId) ? "~/Views/Project/_Layout.cshtml" : "~/Views/Project/_LayoutNotStarted.cshtml";
+}
+<div id="chart-types" class="btn-group">
+	@foreach (ChartItem chart in Model.Charts)
+	{
+		<button value="chart_@((int) chart.Type)_data" class="btn">
+			@chart.Type.GetStringValue()
+		</button>
+	}
+</div>
+<br />
+<br />
+<div id="project-chart" style="width: 100%; height: 400px;">
+</div>
+<table class="table table-hover table-striped sortable" id="priority-table">
+	<thead>
+		<tr>
+			<th style="width: 22%;">
+			</th>
+			<th style="width: 8%;">
+			</th>
+			<th style="width: 14%;">
+				Estimates (Active only)
+			</th>
+			<th style="width: 1%;">
+			</th>
+			<th style="width: 8%;">
+			</th>
+			<th style="width: 8%;">
+			</th>
+			<th style="width: 6%;">
+				Status
+			</th>
+			<th style="width: 7%;">
+			</th>
+			<th style="width: 6%;">
+			</th>
+			<th style="width: 5%;">
+			</th>
+		</tr>
+		<tr>
+			<th style="width: 22%;">
+				User Name
+			</th>
+			<th style="width: 8%;">
+				Total
+			</th>
+			<th style="width: 7%;">
+				Without
+			</th>
+			<th style="width: 8%;">
+				Estimated
+			</th>
+			<th style="width: 8%;">
+				Elapsed
+			</th>
+			<th style="width: 8%;">
+				Remaining
+			</th>
+			<th style="width: 5%;">
+				Active
+			</th>
+			<th style="width: 7%;">
+				Resolved
+			</th>
+			<th style="width: 6%;">
+				Verified
+			</th>
+			<th style="width: 6%;">
+				Closed
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.Items)
+		{
+			<tr>
+				<td style="width: 22%;">
+					@item.Person
+				</td>
+				<td style="width: 8%;">
+					@Html.FogBugzCasesLink(item.Total, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, PersonName = item.Person }, new { target = "_blank" })
+				</td>
+				<td style="width: 7%;">
+					@Html.FogBugzCasesLink(item.WithoutEstimate, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, PersonName = item.Person, HasEstimate = false, HasChildren = false, Status = CaseStatus.Active }, new { target = "_blank" })
+				</td>
+				<td style="width: 8%;">
+					<span>@item.EstimatedTime.FormatDuration()</span>
+					@Html.Hidden("value", item.EstimatedTime)
+				</td>
+				<td style="width: 8%;">
+					<span>@item.ElapsedTime.FormatDuration()</span>
+					@Html.Hidden("value", item.ElapsedTime)
+				</td>
+				<td style="width: 8%;">
+					<span>@item.RemainingTime.FormatDuration()</span>
+					@Html.Hidden("value", item.RemainingTime)
+				</td>
+				<td style="width: 5%;">
+					@Html.FogBugzCasesLink(item.ActiveCount, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, PersonName = item.Person, Status = CaseStatus.Active }, new { target = "_blank" })
+				</td>
+				<td style="width: 7%;">
+					@Html.FogBugzCasesLink(item.ResolvedCount, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, PersonName = item.Person, Status = CaseStatus.Resolved }, new { target = "_blank" })
+				</td>
+				<td style="width: 6%;">
+					@Html.FogBugzCasesLink(item.VerifiedCount, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, PersonName = item.Person, StatusId = FbAccountContext.Current.Settings.ResolvedVerifiedStatusId }, new { target = "_blank" })
+				</td>
+				<td style="width: 6%;">
+					@Html.FogBugzCasesLink(item.ClosedCount, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, PersonName = item.Person, Status = CaseStatus.Closed }, new { target = "_blank" })
+				</td>
+			</tr>
+		}
+	</tbody>
+	<tfoot>
+		<tr>
+			<td style="width: 22%;">
+			</td>
+			<td style="width: 8%;">
+				@Html.FogBugzCasesLink(Model.Items.Sum(i => i.Total), new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId = Model.SubProjectParentCaseId }, new { target = "_blank" })
+			</td>
+			<td style="width: 7%;">
+				@Html.FogBugzCasesLink(Model.Items.Sum(i => i.WithoutEstimate), new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, HasEstimate = false }, new { target = "_blank" })
+			</td>
+			<td style="width: 8%;">@Model.Items.Sum(i => i.EstimatedTime).FormatDuration()
+			</td>
+			<td style="width: 8%;">@Model.Items.Sum(i => i.ElapsedTime).FormatDuration()
+			</td>
+			<td style="width: 8%;">@Model.Items.Sum(i => i.RemainingTime).FormatDuration()
+			</td>
+			<td style="width: 5%;">
+				@Html.FogBugzCasesLink(Model.Items.Sum(i => i.ActiveCount), new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, Status = CaseStatus.Active }, new { target = "_blank" })
+			</td>
+			<td style="width: 7%;">
+				@Html.FogBugzCasesLink(Model.Items.Sum(i => i.ResolvedCount), new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, Status = CaseStatus.Resolved }, new { target = "_blank" })
+			</td>
+			<td style="width: 6%;">
+				@Html.FogBugzCasesLink(Model.Items.Sum(i => i.VerifiedCount), new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, StatusId = FbAccountContext.Current.Settings.ResolvedVerifiedStatusId }, new { target = "_blank" })
+			</td>
+			<td style="width: 6%;">
+				@Html.FogBugzCasesLink(Model.Items.Sum(i => i.ClosedCount), new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, Status = CaseStatus.Closed }, new { target = "_blank" })
+			</td>
+		</tr>
+	</tfoot>
+</table>
+<div style="float:right;" class="mscache">
+	@Html.RefreshData(Model.MsCache.CreatedAt, Model.ProjectId, Model.MilestoneId, Model.SubProjectParentCaseId, MsCacheDataType.FogBugz_CaseSet)
+</div>
+<div style="clear:both;"></div>
+@section Js
+{
+	<script type="text/javascript" src="@Url.Content("~/Content/js/jquery.tablesorter.min.js")"></script>
+	<script type="text/javascript">
+		@foreach (ChartItem chart in Model.Charts)
+		{
+			@:var chart_@((int) chart.Type)_data = @Html.Raw(chart.Data);
+		}
+		
+		function FillPlot(data) {
+			var series = data.Series;
+			var ticks = data.Ticks;
+
+			$.plot($("#project-chart"), series, {
+				series: {
+					stack: false,
+					bars: { show: true, fill: 1, lineWidth: 0, fillColors: [{ opacity: 1 }] }
+				},
+				xaxis: {
+					ticks: ticks
+				},
+				colors: ["#FAD232", "#BDDB4F", "#8CD164", "#51A351"]
+			});
+
+			//show ticks vertically
+			if($(".xAxis .tickLabel").length>10) {
+				$.each($(".xAxis .tickLabel"), function(index, value) {
+					$(value).addClass("vertical");
+					$(value).css("top", $("#project-chart").height() - 95);
+				});
+			}
+		}
+
+
+		$(window).load(function() {
+
+			$("#chart-types button").click(function() {
+				$.each($("#chart-types button"), function(i, v) {
+					$(v).removeClass("active");
+				});
+				$(this).addClass("active");
+				var data = eval($(this).val());
+				FillPlot(data);
+			});
+			
+			$("#priority-table").tablesorter({
+				sortList: [[0, 0]],
+				headers:{
+					0:{
+						sorter:false
+					},
+					1:{
+						sorter:false
+					},
+					2:{
+						sorter:false
+					},
+					3:{
+						sorter:false
+					},
+					4:{
+						sorter:false
+					},
+					5:{
+						sorter:false
+					},
+					6:{
+						sorter:false
+					},
+					7:{
+						sorter:false
+					},
+					8:{
+						sorter:false
+					},
+					9:{
+						sorter:false
+					}
+				},
+				 onRenderHeader: function() {
+				 	this.append('<i class="icon-sort"></i>');
+				 },
+				textExtraction: function(node) {
+					var hidden = $(node).find("input[type=hidden]")[0];
+					if (hidden != undefined)
+						return $(hidden).val();
+					return node.innerText;
+				}
+			});
+
+			$("#chart-types button")[1].click();
+
+		});
+	</script>
+}

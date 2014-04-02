@@ -1,0 +1,646 @@
+﻿@using FogBugzPd.Application.Extensions
+@using FogBugzPd.Core
+@using FogBugzPd.Core.FbAccountModule
+@using FogBugzPd.Core.FogBugzApi
+@using FogBugzPd.Core.FogBugzApi.Enums
+@using FogBugzPd.Core.FogBugzApi.Types
+@using FogBugzPd.Infrastructure
+@using FogBugzPd.Infrastructure.Web
+@using FogBugzPd.Web
+@using FogBugzPd.Web.Utils
+@using FogBugzPd.Web.Models.Project
+@using FogBugzPd.Web._App_Code.Extensions
+@model AsyncDashboardNotStartedViewModel
+
+@if (Model.MilestoneId.HasValue)
+{
+	<div class="row" style="margin-left: 0px;">
+		<div class="well">
+			<h3>Status</h3>
+			<h4 class="btn btn-@Model.ProjectStatus.Status.GetStatusClass()" style="font-size: 14px">@Model.ProjectStatus.Status.GetStringValue()</h4> <br />
+		</div>
+	</div>
+	<div class="well">
+		<h3>
+			Dates</h3>
+		<div class="row">
+			<div class="span5">
+				<table class="table table-striped">
+					<tbody>
+						<tr>
+							<td>
+								Start Date:
+							</td>
+							<td>
+								@Model.DatesSection.StartDate.FormatShortDate()
+								@if (Model.DatesSection.IsActiveProject)
+								{
+									@DateSection(Model.DatesSection.StartDateDaysRemaining, new List<TimeOffRange>(0))
+								}
+							</td>
+						</tr>
+						<tr>
+							<td>
+								@if (Model.SubProjectParentCaseId != null || Model.Milestone.DateStart == null || Model.Milestone.DateRelease == null)
+								{
+									@:Code Freeze:
+								}
+								else
+								{
+									@:Code Freeze <a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="@(Model.CodeFreezeTip)"></a>:
+								}
+							</td>
+							<td>
+								@Model.DatesSection.CodeFreeze.FormatShortDate()
+								@if (Model.DatesSection.IsActiveProject)
+								{
+									@DateSection(Model.DatesSection.CodeFreezeDaysRemaining, Model.DatesSection.CodeFreezeHolidaysBefore, "Holidays before Code Freeze", "code-freeze-holidays")
+								}
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Rollout:
+							</td>
+							<td>
+								@if (Model.DatesSection.Rollout.HasValue)
+								{
+									@: @Model.DatesSection.Rollout.FormatShortDate()
+									if (Model.DatesSection.IsActiveProject)
+									{
+										@DateSection(Model.DatesSection.RolloutDaysRemaining, Model.DatesSection.RolloutHolidaysBefore, "Holidays before Rollout", "rollout-holidays")
+									}
+								}
+								else
+								{
+									@: N/A <a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="Rollout tooltip"></a>
+								}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="offset1 span10">
+				<div id="section-dates-chart" style="width: 100%; height: 50px;">
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<div class="row">
+	<div class="span8 well">
+		<h3>Cases</h3>
+		<div class="row">
+			<div class="span3">
+				<table class="table table-striped stat">
+					<tbody>
+						<tr>
+							<td>
+								Total:
+							</td>
+							<td>
+								@Html.FogBugzCasesLink(Model.CasesSection.Total, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId }, new { target = "_blank" })
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Active:
+							</td>
+							<td>
+								@Html.FogBugzCasesLink(Model.CasesSection.Active, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, Status = CaseStatus.Active }, new { target = "_blank" })
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Resolved:
+							</td>
+							<td>
+								@Html.FogBugzCasesLink(Model.CasesSection.Resolved, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, Status = CaseStatus.Resolved }, new { target = "_blank" })
+							</td>
+						</tr>
+						@if (FbAccountContext.Current.Settings.ResolvedVerifiedStatusId != FbAccountSettings.DefaultStatus.Index.Value)
+						{
+							<tr>
+								<td>
+									Verified:
+								</td>
+								<td>
+									@Html.FogBugzCasesLink(Model.CasesSection.Verified, new FogBugzCasesLinkParams {ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, Status = CaseStatus.ResolvedVerified}, new {target = "_blank"})
+								</td>
+							</tr>
+						}
+					    <tr>
+							<td>
+								Closed:
+							</td>
+							<td>
+								@Html.FogBugzCasesLink(Model.CasesSection.Closed, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, Status = CaseStatus.Closed }, new { target = "_blank" })
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="offset1 span4">
+				<div id="section-cases-chart" style="width: 100%; height: 180px;">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="span8 well" style="float: right;">
+		<h3>Times</h3>
+		<div class="row">
+			<div class="span3">
+				<table class="table table-striped stat">
+					<tbody>
+						<tr>
+							<td>
+								Total Estimated:
+							</td>
+							<td>
+								@Model.TimeSection.TotalEstimated.FormatDuration()
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Elapsed:
+							</td>
+							<td>
+								@Model.TimeSection.Elapsed.FormatDuration()
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Active Estimated:
+							</td>
+							<td>
+								@Model.TimeSection.ActiveEstimated.FormatDuration()
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Active Remaining:
+							</td>
+							<td style="text-align: right">
+								@Model.TimeSection.ActiveRemaining.FormatDuration()
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="offset1 span4">
+				<div id="section-time-chart" style="width: 100%; height: 180px;">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="span8 well">
+		<h3>Estimates <small>for active cases</small></h3>
+		<div class="row">
+			<div class="span3">
+				<table class="table table-striped stat">
+					<tbody>
+						<tr>
+							<td>
+								Cases with estimate:
+							</td>
+							<td>
+								@Html.FogBugzCasesLink(Model.EstimatesSection.WithEstimates, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, Status = CaseStatus.Active, HasEstimate = true}, new { target = "_blank" })
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Cases without estimate:
+							</td>
+							<td>
+								@Html.FogBugzCasesLink(Model.EstimatesSection.WithoutEstimates, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, Status = CaseStatus.Active, HasEstimate = false}, new { target = "_blank" })
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Active cases going over estimate:
+							</td>
+							<td>
+								@Model.EstimatesSection.GoingOverEstimate
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="offset1 span4">
+				<div id="section-estimates-chart" style="width: 100%; height: 180px;">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="span8 well" style="float: right;">
+		<h3>Accuracy <small>for resolved and closed cases</small></h3>
+		<div class="row">
+			<div class="span4">
+				<table class="table table-striped stat">
+					<tbody>
+						<tr>
+							<td>
+								Estimated time:
+							</td>
+							<td>
+								@Model.AccuracySection.EstimatedTime.FormatDuration()
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Actual time:
+							</td>
+							<td>
+								@Model.AccuracySection.ActualTime.FormatDuration()
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div style="float:right;" class="mscache">
+		@Html.RefreshData(Model.MsCache.CreatedAt, Model.ProjectId, Model.MilestoneId, Model.SubProjectParentCaseId, MsCacheDataType.FogBugz_CaseSet)
+	</div>
+	<div style="clear:both;"></div>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		var casesData = [
+			{ label: 'Active', data: @(Model.CasesSection.Active) },
+			{ label: 'Resolved', data: @(Model.CasesSection.Resolved) },
+			{ label: 'Verified', data: @(Model.CasesSection.Verified) },
+			{ label: 'Closed', data: @(Model.CasesSection.Closed) }
+		];
+
+		var timeData = [
+			{ label: 'Elapsed', data: @(Model.TimeSection.Elapsed.ToString()) },
+			{ label: 'Remaining', data: @(Model.TimeSection.ActiveRemaining.ToString()) }
+		];
+
+		var estimatesData = [
+			{ label: 'Cases with estimates', data: @(Model.EstimatesSection.WithEstimates), color: "rgba(0,255,0,255)" },
+			{ label: 'Cases without estimates', data: @(Model.EstimatesSection.WithoutEstimates), color: "rgba(255,72,72,255)" }
+		];
+
+		var pieChartHover = function(event, pos, item) {
+			if (item) {
+				$("#tooltip").remove();
+				var percent = parseFloat(item.series.percent).toFixed(2);
+				showTooltip(pos.pageX, pos.pageY, item.series.label + "<br/>" + percent + "%");
+			} else {
+				$("#tooltip").remove();
+			}
+		};
+
+			
+
+		var pieOpts = {
+			series: {
+				pie: {
+					show: true,
+					radius: 1,
+					label: {
+						show: false
+					},
+					highlight: {
+						opacity: 0
+					}
+				}
+			},
+			legend: {
+				show: true
+			},
+			grid: {
+				hoverable: true
+			}
+		};
+
+		$.plot($("#section-cases-chart"), casesData, pieOpts);
+		$.plot($("#section-time-chart"), timeData, pieOpts);
+		$.plot($("#section-estimates-chart"), estimatesData, pieOpts);
+			
+		$("#section-cases-chart").bind("plothover", pieChartHover);
+		$("#section-time-chart").bind("plothover", pieChartHover);
+		$("#section-estimates-chart").bind("plothover", pieChartHover);
+	});
+</script>
+
+<script type="text/javascript" src="@Url.Content("~/Content/js/jquery.tablesorter.min.js")"></script>
+<script type="text/javascript">
+	
+
+		@if (Model.MilestoneId.HasValue && Model.DatesSection.PlotTimes != null)
+  {
+		<text>
+	function showDateChartTooltip(x, y, contents, j){
+		var id = "tooltip";
+		if (j != null) id = id + "-" + j.toString();
+		var tooltip = $('<div class="tooltip fade top in" id="' + id + '"><div class="tooltip-arrow"></div><div class="tooltip-inner">' + contents + '</div></div>').css({
+			display:'block',
+			top:y + 5,
+			left:x + 5
+		});
+
+		$(tooltip).appendTo("body");
+		$(tooltip).css({
+			left:x - (Math.round($(tooltip).width()/2)),
+			top:y - ($(tooltip).height() + 10)
+		});
+	}
+
+	function showTooltip(x, y, contents, j){
+		var id = "tooltip";
+		if (j != null)
+			id = id + "-" + j.toString();
+		$('<div id="' + id + '">' + contents + '</div>').css({
+			position:'absolute',
+			display:'none',
+			top:y + 5,
+			left:x + 5,
+			border:'1px solid #fdd',
+			padding:'2px',
+			'background-color':'#fee',
+			opacity:0.80
+		}).appendTo("body").fadeIn(200);
+	}
+
+	var showDatesPlotTooltips = function(plot){
+		var data = plot.getData();
+		var axes = plot.getAxes();
+		var offset = $
+		("#section-dates-chart").offset();
+		var series = data[1];
+		for (var j = 0; j < series.data.length; j++){
+			var d = (series.data[j]);
+			var x = offset.left + axes.xaxis.p2c(d[0]);
+			var y = offset.top + axes.yaxis.p2c(d[1]);
+			var pd = plotDates[j];
+			var id = "tooltip";
+			if (j != null) id = id + "-" + j.toString();
+			var tooltip = $('<div class="tooltip fade top in" id="' + id + '"><div class="tooltip-arrow"></div><div class="tooltip-inner">' + pd.label + "<br/>" + pd.timestr + '</div></div>').css({
+				display:'block',
+				top:y + 5,
+				left:x + 5
+			});
+			$(tooltip).appendTo("body");
+			$(tooltip).css({
+				left:x - (Math.round($(tooltip).width()/2)),
+				top:y - ($(tooltip).height() + 10)
+			});
+		}
+	};
+
+	var datesPlot = null;
+
+	var plotDates =
+			[@Html.Raw(string.Join(",", Model.DatesSection.PlotTimes.Select(pt => string.Format("{{timestr:'{0}', label:'{1}'}}", pt.DateTime.FormatShortDate(), pt.Label))))]
+	;
+	</text>
+  }
+
+	$(document).ready(function() {
+		$(".tip").tooltip({
+			'placement': 'top'
+		});
+			
+
+		$("#sortable-table").tablesorter({
+			sortList: [[0, 0]],
+			onRenderHeader: function() {
+				this.append('<i class="icon-sort"></i>');
+			},
+			textExtraction: function(node) {
+				var hidden = $(node).find("input[type=hidden]")[0];
+				if (hidden != undefined)
+					return $(hidden).val();
+				return node.innerText;
+			}
+		});
+
+			@if (Model.MilestoneId.HasValue && Model.DatesSection.PlotTimes != null)
+		{
+	   if (Model.DatesSection.StartDate != null)
+	   {
+			<text>
+		var datesData = [
+			{
+				data: [
+					[@(Model.DatesSection.MinimumTime.UnixTime() * 1000), 0],
+							[@(Model.DatesSection.MaximumTime.UnixTime() * 1000), 0]
+					],
+					lines: { show: true },
+					color: '#6a6',
+					hoverable:false
+				},
+					{
+						data: [
+							@Html.Raw(string.Join(",", Model.DatesSection.PlotTimes.Select(pt => string.Format("[{0},0]", pt.DateTime.UnixTime() * 1000))))
+						],
+						points: {show: true},
+						hoverable: true
+					}
+			];
+		datesPlot = $.plot($("#section-dates-chart"), datesData, {
+			xaxis: {
+				mode: "time",
+				show: true,
+				tickColor: "rgba(0,0,0,0)",
+				minTickSize: [1, "day"],
+				min: @(Model.DatesSection.MinimumTime.UnixTime() * 1000),
+					max: @(Model.DatesSection.MaximumTime.UnixTime() * 1000)
+					},
+				yaxis: {
+					show: false
+				},
+				legend: {
+					show: false
+				},
+				grid: {
+					show: true,
+					borderWidth: 0,
+					hoverable:false
+				}
+			});
+			</text>
+	   }
+
+	   else if (Model.DatesSection.Rollout > DateTime.Now)
+	   {
+			<text>
+		var datesData = [
+			{
+				data: [
+					[@(Model.DatesSection.Rollout.Value.UnixTime() * 1000), 0],
+							[@(DateTime.Now.UnixTime() * 1000), 0]
+					],
+					lines: { show: true },
+					color: '#6a6',
+					hoverable:false
+				},
+					{
+						data: [
+							@Html.Raw(string.Join(",", Model.DatesSection.PlotTimes.Select(pt => string.Format("[{0},0]", pt.DateTime.UnixTime() * 1000))))
+						],
+						points: {show: true},
+						hoverable: true
+					}
+			];
+		datesPlot = $.plot($("#section-dates-chart"), datesData, {
+			xaxis: {
+				mode: "time",
+				show: true,
+				tickColor: "rgba(0,0,0,0)",
+				minTickSize: [1, "day"],
+				max: @(Model.DatesSection.Rollout.Value.UnixTime() * 1000),
+					min: @(DateTime.Now.UnixTime() * 1000)
+					},
+				yaxis: {
+					show: false
+				},
+				legend: {
+					show: false
+				},
+				grid: {
+					show: true,
+					borderWidth: 0,
+					hoverable:false
+				}
+			});
+			</text>
+	   }
+	   else
+	   {
+			<text>
+		var datesData = [
+			{
+				data: [
+					[@(Model.DatesSection.Rollout.Value.UnixTime() * 1000), 0],
+							[@(DateTime.Now.UnixTime() * 1000), 0]
+					],
+					lines: { show: true },
+					color: '#6a6',
+					hoverable:false
+				},
+					{
+						data: [
+							@Html.Raw(string.Join(",", Model.DatesSection.PlotTimes.Select(pt => string.Format("[{0},0]", pt.DateTime.UnixTime() * 1000))))
+						],
+						points: {show: true},
+						hoverable: true
+					}
+			];
+		datesPlot = $.plot($("#section-dates-chart"), datesData, {
+			xaxis: {
+				mode: "time",
+				show: true,
+				tickColor: "rgba(0,0,0,0)",
+				minTickSize: [1, "day"],
+				min: @(Model.DatesSection.Rollout.Value.UnixTime() * 1000),
+					max: @(DateTime.Now.UnixTime() * 1000)
+					},
+				yaxis: {
+					show: false
+				},
+				legend: {
+					show: false
+				},
+				grid: {
+					show: true,
+					borderWidth: 0,
+					hoverable:false
+				}
+			});
+				
+			</text>
+	   }
+
+				<text>
+		showDatesPlotTooltips(datesPlot);
+
+		$("#rollout-holidays").popover({
+			html: true,
+			trigger: 'hover',
+			content: '@(Model.DatesSection.RolloutHolidaysBefore.GenerateHolidaysTable())'
+			});
+
+		@if (Model.DatesSection.CodeFreeze.HasValue)
+	{
+					@Html.Raw(string.Format(@"
+						$('#code-freeze-holidays').popover({{
+							html: true,
+							trigger: 'hover',
+							content: '{0}'
+						}});", Model.DatesSection.CodeFreezeHolidaysBefore.GenerateHolidaysTable()))
+	}
+				</text>
+   }
+
+		var pieChartHover = function(event, pos, item) {
+			if (item) {
+				$("#tooltip").remove();
+				var percent = parseFloat(item.series.percent).toFixed(2);
+				showTooltip(pos.pageX, pos.pageY, item.series.label + "<br/>" + percent + "%");
+			} else {
+				$("#tooltip").remove();
+			}
+		};
+
+			
+
+		var pieOpts = {
+			series: {
+				pie: {
+					show: true,
+					radius: 1,
+					label: {
+						show: false
+					},
+					highlight: {
+						opacity: 0
+					}
+				}
+			},
+			legend: {
+				show: true
+			},
+			grid: {
+				hoverable: true
+			}
+		};
+	});
+	</script>
+
+
+
+@helper DateSection(int? daysRemaining, IList<TimeOffRange> holidays, string title = null, string calendarSpanId = null)
+	{
+		if (daysRemaining.HasValue)
+		{
+	@Html.Raw("&nbsp;&ndash;&nbsp;")
+
+			if (daysRemaining > 0)
+			{
+	<span>@(daysRemaining)
+		work days left</span>
+				if (holidays.Any() && !string.IsNullOrEmpty(title) && !string.IsNullOrEmpty(calendarSpanId))
+				{
+	<a href="#" rel="tooltip" title="@(title)" id="@(calendarSpanId)"><i class="icon-time">
+	</i></a>
+				}
+			}
+			else if (daysRemaining == 0)
+			{
+	<span class="badge badge-info">today</span>
+			}
+			else
+			{
+	<span>@(-daysRemaining)
+		work days passed</span>
+			}
+		}
+}

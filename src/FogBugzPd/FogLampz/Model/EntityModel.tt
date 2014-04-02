@@ -1,0 +1,94 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ output extension=".cs" #>
+
+using System;
+using System.Collections.Generic;
+using FogLampz.Attributes;
+
+namespace FogLampz.Model
+{
+<# foreach(var def in GetEntityDefinitions()) {#>
+  [EntityApiInfo(CreateCommand = "<#=def.CreateCommand#>", ListCommand = "<#=def.ListCommand#>", Root = "<#=def.Root#>", Element = "<#=def.Element#>")]
+  public partial class <#=def.Name#> : FogBugzEntityBase
+  {
+    public <#=def.Name#>() {}
+	public <#=def.Name#>(IDictionary<string,string> fields) : base(fields) {  }
+
+	<# foreach(var prop in def.Properties) { #>
+	[PropertyMap("<#=prop.Map#>", ConversionStrategy.<#=prop.Strategy#>)]
+	public <#=prop.Type#> <#=prop.Name#> {get;set;}
+	<# } #>
+  }
+<# } #>
+}
+<#+
+
+public List<EntityDefinition> GetEntityDefinitions()
+{
+
+    List<EntityDefinition> result = new List<EntityDefinition>();
+
+    XmlDocument doc = new XmlDocument();
+
+    string absolutePath = Host.ResolvePath("Entities.xml");
+
+    doc.Load(absolutePath);
+
+
+    foreach (XmlNode node in doc.SelectNodes("/Entities/Entity"))
+    {
+
+        var def = new EntityDefinition
+                        {
+							CreateCommand = node.Attributes["CreateCommand"].Value,
+                            ListCommand = node.Attributes["ListCommand"].Value,
+                            Name = node.Attributes["Name"].Value,
+                            Element = node.Attributes["Element"].Value,
+                            Root = node.Attributes["Root"].Value,
+                            Properties = new List<PropertyDefinition>()
+                        };
+        var props = node.ChildNodes;
+        foreach (XmlNode prop in props)
+        {
+            var pdef = new PropertyDefinition
+                            {
+                                Name = prop.Attributes["Name"].Value,
+                                Type = prop.Attributes["Type"].Value,
+                                Map = prop.Attributes["Map"].Value,
+                                Strategy = prop.Attributes["Strategy"].Value
+                            };
+            def.Properties.Add(pdef);
+        }
+
+        result.Add(def);
+
+    }
+
+    return result;
+
+}
+
+public struct EntityDefinition
+{
+    public string Name;
+    public string CreateCommand;
+    public string ListCommand;
+    public string Root;
+    public string Element;
+
+    public List<PropertyDefinition> Properties;
+}
+
+public struct PropertyDefinition
+{
+    public string Name;
+    public string Type;
+    public string Map;
+    public string Strategy;
+}
+#>

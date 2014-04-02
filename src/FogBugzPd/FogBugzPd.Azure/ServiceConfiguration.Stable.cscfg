@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="FogBugzPd.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2013-10.2.2">
+  <Role name="FogBugzPd.WorkerRole">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=entechsystem;AccountKey=y6R77uOvnfbNP3HhfzJ18ZKU+M2LPUELdxpnXL/Vz573yrXoKiYWy1+uZduE9jf0GDg4EonqnIUvx5siyPjq9w==" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>

@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "Projects";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section Js
+{
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("#loader").height(200);
+			$("#loader").width(200);
+			$("#loader").show();
+			location.href = '@ViewBag.RedirectUrl';
+		});
+	</script>
+}
+
+<div style="margin: auto; width:300px;">
+	Loading projects and milestones...
+</div>
+

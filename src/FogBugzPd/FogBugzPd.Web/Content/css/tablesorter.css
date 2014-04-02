@@ -1,0 +1,20 @@
+﻿th.headerSortUp {
+	background-color: #e5e5e5;
+} 
+th.headerSortUp i.icon-sort{
+	background-position: -313px -119px;
+}
+th.headerSortDown {
+	background-color: #e5e5e5;
+}
+th.headerSortDown i.icon-sort{
+	background-position: -288px -120px;
+}
+
+th.header {
+	cursor: pointer;
+}
+
+th.header:hover {
+	background-color: #ccc;
+}

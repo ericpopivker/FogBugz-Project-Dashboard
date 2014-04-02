@@ -1,0 +1,81 @@
+﻿@using FogBugzPd.Web
+@{
+	ViewBag.Title = "Projects and Milestones";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Js
+{
+	<script type="text/javascript">
+
+		var timer = null;
+		var progressTimer = null;
+
+		function loadStatuses() {
+			timer = setInterval(function() { getStatus(); }, 3000);
+		}
+
+		function getStatus() {
+			$.post(resolveUrl("~/Project/GetStatuses"),
+				{},
+				function(result) {
+					if (result.iscomplete == true) clearInterval(timer);
+					for (var i = 0; i < result.Results.length; i++) {
+						var id = result.Results[i].Id;
+						$("#" + id).html(result.Results[i].Status);
+					}
+
+
+				}, "JSON");
+		}
+
+		function checkProgress() {
+			$.post(resolveUrl("~/Project/GetProgressStatus"),
+				{},
+				function(result) {
+					if (progressTimer == null) progressTimer = setInterval(function() { checkProgress(); }, 500);
+					$("#progress-value").css("width", result.Value + "%");
+					$("#progress-label").html(result.Label);
+					if (result.Value == 100 && progressTimer != null) {
+						clearInterval(progressTimer);
+						$("#progress-loader").hide();
+					}
+				}, "JSON");
+		}
+
+		$(document).ready(function() {
+			$("#loader").height(200);
+			$("#loader").show();
+
+			var date = new Date();
+			var offset = date.getTimezoneOffset();
+
+			$("#progress-loader").show();
+
+			checkProgress();
+
+			$.post(resolveUrl("~/Project/AsyncList"),
+				{
+					timeOffest: offset
+				},
+				function(result) {
+					$("#loader").hide();
+					$("#projects-milestones-div").empty();
+					$("#projects-milestones-div").html(result);
+					$("#projects-milestones-div").show();
+					loadStatuses();
+				}, "HTML");
+		});
+	</script>
+}
+
+@section Css
+{
+	<link rel = "stylesheet" href="@Url.ContentV("~/Content/css/project.css")"/>
+}
+
+<div id="loader" class="container" style="display: none;margin: auto;">
+	<img src="@Url.Content("~/Content/img/loader.gif")"/>
+</div>
+
+<div id="projects-milestones-div" class="container">
+</div>

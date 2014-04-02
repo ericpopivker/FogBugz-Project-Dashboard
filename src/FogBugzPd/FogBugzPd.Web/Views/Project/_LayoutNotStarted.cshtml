@@ -1,0 +1,80 @@
+﻿@using FogBugzPd.Web
+@using FogBugzPd.Web.Models.Project
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var tabsModel = new TabsViewModel();
+	tabsModel.Setup(ViewContext.RequestContext.RouteData);
+    ViewBag.MasterTitle = ViewBag.ProjectName + " : " + ViewBag.MilestoneName + (ViewBag.SubProjectName == null ? String.Empty : " : " + ViewBag.SubProjectName);
+
+	var currentUrl = Request.Url.AbsoluteUri;
+	var dasboardNotStartedUrl = Url.Action("DashboardNotStarted", "Project", tabsModel.RouteValues);
+	
+	//var casesByPriorityUrl = Url.Action("Priority", "Project", tabsModel.RouteValues);
+	var casesByDeveloperUrl = Url.Action("Developer", "Project", tabsModel.RouteValues);
+	var qaUrl = Url.Action("Qa", "Project", tabsModel.RouteValues);	
+}
+
+@if(ViewBag.CountdownUnixTime!=null)
+{
+	<span time="@ViewBag.CountdownUnixTime" class="kkcountdown" style="display: none;">@ViewBag.CountdownLabel </span>
+}
+
+<ul class="nav nav-tabs" id="tabs" style="margin-bottom: 0;">
+	<li class="@(currentUrl.Contains(dasboardNotStartedUrl) ? "active" : "")"><a href="@dasboardNotStartedUrl">Dashboard</a> </li>
+    @*<li class="@(currentUrl.Contains(casesByPriorityUrl) ? "active" : "")"><a href="@casesByPriorityUrl">Cases by Priority</a> </li>*@
+    <li class="@(currentUrl.Contains(casesByDeveloperUrl) ? "active" : "")"><a href="@casesByDeveloperUrl">Cases by User</a> </li>
+    <li class="@(currentUrl.Contains(qaUrl) ? "active" : "")"><a href="@qaUrl">QA</a>
+    </li>
+</ul>
+
+<div id="loader" class="container" style="display: none;">
+	<img src="@Url.Content("~/Content/img/loader.gif")"/>
+</div>
+
+<div class="container @(currentUrl.Contains(dasboardNotStartedUrl) ? "dashboard" : "")" id="project-content" style="padding-top: 20px;">
+	@RenderBody()
+</div>
+
+@section Js
+{
+	<script src="@Url.Content("~/Content/js/kkcountdown.js")"></script>
+	<script src="@Url.Content("~/Content/packages/flot/excanvas.js")"></script>
+	<script src="@Url.Content("~/Content/packages/flot/jquery.flot.js")"></script>
+	<script src="@Url.Content("~/Content/packages/flot/jquery.flot.stack.js")"></script>
+	<script src="@Url.Content("~/Content/packages/flot/jquery.flot.pie.js")"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("#tabs a").click(function (e) {
+				if (e.which == 1 && $(this).attr('class') != "wikilink" && $(this).attr('id') != "dashboard-menu") {
+					$("#loader").height($("#project-content").height());
+					if ($("#loader").height() == 0)
+						$("#loader").height(200);
+					$("#loader").show();
+				}
+			});
+
+			$(".kkcountdown").kkcountdown({
+				dayText: 'day ',
+				daysText: 'days ',
+				hoursText: 'h ',
+				minutesText: 'm ',
+				secondsText: 's',
+				displayZeroDays: false,
+				addClass: 'shadow',
+				useLocalTimezone:true
+			});
+
+			$(".kkcountdown").fadeIn(400);
+		});
+	</script>
+	@RenderSection("Js", false)
+}
+
+@section Css
+{
+	<link rel = "stylesheet" href="@Url.ContentV("~/Content/css/project.css")"/>
+	<link rel = "stylesheet" href="@Url.ContentV("~/Content/css/tablesorter.css")"/>
+	@RenderSection("Css",false)
+}
+

@@ -1,0 +1,512 @@
+﻿@using FogBugzPd.Application.Extensions
+@using FogBugzPd.Core
+@using FogBugzPd.Core.FogBugzApi
+@using FogBugzPd.Core.FogBugzApi.Types
+@using FogBugzPd.Infrastructure
+@using FogBugzPd.Infrastructure.Web
+@using FogBugzPd.Web
+@using FogBugzPd.Web.Utils
+@using FogBugzPd.Web.Models.Project
+@using FogBugzPd.Web._App_Code.Extensions
+@model AsyncDashboardViewModel
+
+@if (Model.MilestoneId.HasValue)
+{
+	<div class="row" style="margin-left: 0px;">
+		<div class="well">
+			<h3>Status</h3>
+			<h4 class="btn btn-@Model.ProjectStatus.Status.GetStatusClass()" style="font-size: 14px">@Model.ProjectStatus.Status.GetStringValue()</h4> <br />
+			<h5 style="padding: 1px; display: inline;">@StringUtils.FormatSignDecimal(Model.ProjectStatus.StatusValue, 1) work days @Model.ProjectStatus.OverUnderLabel(Model.ProjectStatus.TotalActualOverUnder)</h5>
+		</div>
+	</div>
+	<div class="well">
+		<h3>
+			Dates</h3>
+		<div class="row">
+			<div class="span5">
+				<table class="table table-striped">
+					<tbody>
+						<tr>
+							<td>
+								Start Date:
+							</td>
+							<td>
+								@Model.DatesSection.StartDate.FormatShortDate()
+								@if (Model.DatesSection.IsActiveProject)
+								{
+									@DateSection(Model.DatesSection.StartDateDaysRemaining, new List<TimeOffRange>(0))
+								}
+							</td>
+						</tr>
+						<tr>
+							<td>
+								@if (Model.SubProjectParentCaseId != null || Model.Milestone.DateStart == null || Model.Milestone.DateRelease == null)
+								{
+									@:Code Freeze:
+								}
+								else
+								{
+									@:Code Freeze <a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="@(Model.CodeFreezeTip)"></a>:
+								}
+							</td>
+							<td>
+								@Model.DatesSection.CodeFreeze.FormatShortDate()
+								@if (Model.DatesSection.IsActiveProject)
+								{
+									@DateSection(Model.DatesSection.CodeFreezeDaysRemaining, Model.DatesSection.CodeFreezeHolidaysBefore, "Holidays before Code Freeze", "code-freeze-holidays")
+								}
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Rollout:
+							</td>
+							<td>
+								@if (Model.DatesSection.Rollout.HasValue)
+								{
+									@: @Model.DatesSection.Rollout.FormatShortDate()
+									if (Model.DatesSection.IsActiveProject)
+									{
+										@DateSection(Model.DatesSection.RolloutDaysRemaining, Model.DatesSection.RolloutHolidaysBefore, "Holidays before Rollout", "rollout-holidays")
+									}
+								}
+								else
+								{
+									@: N/A <a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="Rollout tooltip"></a>
+								}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="offset1 span10">
+				<div id="section-dates-chart" style="width: 100%; height: 50px;">
+				</div>
+			</div>
+		</div>
+	</div>
+	if (Model.ProjectStatus.EmployeeStatuses != null && Model.ProjectStatus.EmployeeStatuses.Count > 0)
+	{
+		 <div class="row" style="margin-left: 0px;">
+			 <div class="well">
+				 <h3>User Progress</h3>
+				 <table class="table table-hover table-striped sortable" id="sortable-table">
+					 <thead>
+						 <tr>
+							 <th style="width: 10%;">
+								 User
+							 </th>
+							 <th style="width: 20%;">
+								 Scheduled Work Days
+							 </th>
+							 <th style="width: 20%;">
+								 Estimated Work Days
+							 </th>
+							 <th style="width: 20%;">
+								 Over/Under
+							 </th>
+							 @*
+						<th style="width: 16%;">
+							Worked Days
+							<a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="Worked Days Tip"></a>
+						</th>
+						<th style="width: 16%;">
+							Adjusted Over/Under
+							<a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="Adjusted Over/Under Tip"></a>
+						</th>
+						*@
+							 <th style="width: 20%;">
+								 Actual Over/Under
+								 <a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="Actual Over/Under Tip"></a>
+							 </th>
+						 </tr>
+					 </thead>
+					 <tbody style ="max-height: 180px ;overflow-y: auto">
+						@foreach (var item in Model.ProjectStatus.EmployeeStatuses)
+						{
+							 <tr>
+								 <td style="width: 10%;">
+									 @item.Username
+									 @Html.Hidden("value", item.Username)
+								 </td>
+								 <td style="width: 20%;">
+									 <span>@StringUtils.FormatNonSignDecimal(item.ScheduledWorkDays, 1)</span>
+									 @Html.Hidden("value", item.ScheduledWorkDays)
+								 </td>
+								 <td style="width: 20%;">
+									 @StringUtils.FormatSignDecimal(item.RemainingDays, 1)
+									 @Html.Hidden("value", item.RemainingDays)
+								 </td>
+								 <td style="width: 20%;">
+									 <span class="@item.OverUnder.GetStatusClass()">@StringUtils.FormatSignDecimal(item.OverUnder, 1)</span>
+									 @Html.Hidden("value", item.OverUnder)
+								 </td>
+								 @*
+							<td style="width: 16%;">
+								@item.WorkedDays (@StringUtils.FormatPercent(item.PercentageWorkedDays) <a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="@item.GenerateWorkedDaysCalculation()"></a>)
+							</td>
+							<td style="width: 16%;" class="@item.AdjustedOverUnder.GetStatusClass()">
+								<span>@StringUtils.FormatSignDecimal(item.AdjustedOverUnder, 1)</span>
+									<a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="@item.GenerateAdjustedStatusCalculation(Model.ProjectStatus.DaysToRelease)"></a>
+							</td>
+							*@
+								 <td style="width: 20%;">
+									 <span class="@item.ActualOverUnder.GetStatusClass()">@StringUtils.FormatSignDecimal(item.ActualOverUnder, 1)</span>
+									 <a href="javascript:void(0);" class="icon-question-sign tip" data-toggle="tooltip" data-original-title="@item.GenerateActualStatusCalculation(Model.ProjectStatus.DaysToRelease)"></a>
+									 @Html.Hidden("value", item.ActualOverUnder)
+								 </td>
+							 </tr>
+						}
+					 </tbody>
+					 <tfoot>
+						 <tr>
+							 <td style="width: 10%;">
+								 Totals
+							 </td>
+							 <td style="width: 20%;">
+								 avg: @StringUtils.FormatNonSignDecimal(Model.ProjectStatus.TotalScheduledWorkDays, 1)
+							 </td>
+							 <td style="width: 20%;">
+								 avg: @StringUtils.FormatSignDecimal(Model.ProjectStatus.TotalRemainingDays, 1)
+							 </td>
+							 <td style="width: 20%;">
+								 <span class="@Model.ProjectStatus.TotalOverUnder.GetStatusClass()">@StringUtils.FormatSignDecimal(Model.ProjectStatus.TotalOverUnder, 1)</span>
+							 </td>
+							 @*
+						<td style="width: 16%;">
+							avg:@StringUtils.FormatSignDecimal(Model.ProjectStatus.TotalWorkedDays, 1) (@StringUtils.FormatPercent(Model.ProjectStatus.TotalPercentageWorkedDays))
+						</td>
+						<td style="width: 16%;">
+							<span class="@Model.ProjectStatus.TotalAdjustedOverUnder.GetStatusClass()">@StringUtils.FormatSignDecimal(Model.ProjectStatus.TotalAdjustedOverUnder, 1)</span>
+						</td>
+						*@
+							 <td style="width: 20%;">
+								 <span class="@Model.ProjectStatus.TotalActualOverUnder.GetStatusClass()">@StringUtils.FormatSignDecimal(Model.ProjectStatus.TotalActualOverUnder, 1) 
+									 men/days @Model.ProjectStatus.OverUnderLabel(Model.ProjectStatus.TotalActualOverUnder) <br />
+									 (@Model.ProjectStatus.EmployeeStatuses.Count devs)
+									 <br />
+									 @StringUtils.FormatSignDecimal(Model.ProjectStatus.StatusValue, 1)
+									 @Model.ProjectStatus.OverUnderLabel(Model.ProjectStatus.TotalActualOverUnder)
+								 </span>
+							 </td>
+						 </tr>
+					 </tfoot>
+				 </table>
+			 </div>
+		 </div>
+	}
+}
+
+<script type="text/javascript" src="@Url.Content("~/Content/js/jquery.tablesorter.min.js")"></script>
+<script type="text/javascript">
+	
+
+		@if (Model.MilestoneId.HasValue && Model.DatesSection.PlotTimes != null)
+  {
+		<text>
+	function showDateChartTooltip(x, y, contents, j){
+		var id = "tooltip";
+		if (j != null) id = id + "-" + j.toString();
+		var tooltip = $('<div class="tooltip fade top in" id="' + id + '"><div class="tooltip-arrow"></div><div class="tooltip-inner">' + contents + '</div></div>').css({
+			display:'block',
+			top:y + 5,
+			left:x + 5
+		});
+
+		$(tooltip).appendTo("body");
+		$(tooltip).css({
+			left:x - (Math.round($(tooltip).width()/2)),
+			top:y - ($(tooltip).height() + 10)
+		});
+	}
+
+	function showTooltip(x, y, contents, j){
+		var id = "tooltip";
+		if (j != null)
+			id = id + "-" + j.toString();
+			$('<div id="' + id + '">' + contents + '</div>').css({
+			position:'absolute',
+			display:'none',
+			top:y + 5,
+			left:x + 5,
+			border:'1px solid #fdd',
+			padding:'2px',
+			'background-color':'#fee',
+			opacity:0.80
+		}).appendTo("body").fadeIn(200);
+	}
+
+	var showDatesPlotTooltips = function(plot){
+		var data = plot.getData();
+		var axes = plot.getAxes();
+		var offset = $
+		("#section-dates-chart").offset();
+		var series = data[1];
+		for (var j = 0; j < series.data.length; j++){
+			var d = (series.data[j]);
+			var x = offset.left + axes.xaxis.p2c(d[0]);
+			var y = offset.top + axes.yaxis.p2c(d[1]);
+			var pd = plotDates[j];
+			var id = "tooltip";
+			if (j != null) id = id + "-" + j.toString();
+			var tooltip = $('<div class="tooltip fade top in" id="' + id + '"><div class="tooltip-arrow"></div><div class="tooltip-inner">' + pd.label + "<br/>" + pd.timestr + '</div></div>').css({
+				display:'block',
+				top:y + 5,
+				left:x + 5
+			});
+		$(tooltip).appendTo("body");
+		$(tooltip).css({
+				left:x - (Math.round($(tooltip).width()/2)),
+				top:y - ($(tooltip).height() + 10)
+			});
+		}
+	};
+
+	var datesPlot = null;
+
+	var plotDates =
+			[@Html.Raw(string.Join(",", Model.DatesSection.PlotTimes.Select(pt => string.Format("{{timestr:'{0}', label:'{1}'}}", pt.DateTime.FormatShortDate(), pt.Label))))]
+			;
+	</text>
+  }
+
+		$(document).ready(function() {
+			$(".tip").tooltip({
+				'placement': 'top'
+			});
+			
+
+			$("#sortable-table").tablesorter({
+				sortList: [[0, 0]],
+				onRenderHeader: function() {
+					this.append('<i class="icon-sort"></i>');
+				},
+				textExtraction: function(node) {
+					var hidden = $(node).find("input[type=hidden]")[0];
+					if (hidden != undefined)
+						return $(hidden).val();
+					return node.innerText;
+				}
+			});
+
+			@if (Model.MilestoneId.HasValue && Model.DatesSection.PlotTimes != null)
+		{
+	   if (Model.DatesSection.StartDate != null)
+	   {
+			<text>
+				var datesData = [
+					{
+						data: [
+							[@(Model.DatesSection.MinimumTime.UnixTime() * 1000), 0],
+							[@(Model.DatesSection.MaximumTime.UnixTime() * 1000), 0]
+						],
+						lines: { show: true },
+						color: '#6a6',
+						hoverable:false
+					},
+					{
+						data: [
+							@Html.Raw(string.Join(",", Model.DatesSection.PlotTimes.Select(pt => string.Format("[{0},0]", pt.DateTime.UnixTime() * 1000))))
+						],
+						points: {show: true},
+						hoverable: true
+					}
+				];
+				datesPlot = $.plot($("#section-dates-chart"), datesData, {
+					xaxis: {
+						mode: "time",
+						show: true,
+						tickColor: "rgba(0,0,0,0)",
+						minTickSize: [1, "day"],
+						min: @(Model.DatesSection.MinimumTime.UnixTime() * 1000),
+						max: @(Model.DatesSection.MaximumTime.UnixTime() * 1000)
+					},
+					yaxis: {
+						show: false
+					},
+					legend: {
+						show: false
+					},
+					grid: {
+						show: true,
+						borderWidth: 0,
+						hoverable:false
+					}
+				});
+			</text>
+	   }
+
+	   else if (Model.DatesSection.Rollout > DateTime.Now)
+	   {
+			<text>
+				var datesData = [
+					{
+						data: [
+							[@(Model.DatesSection.Rollout.Value.UnixTime() * 1000), 0],
+							[@(DateTime.Now.UnixTime() * 1000), 0]
+						],
+						lines: { show: true },
+						color: '#6a6',
+						hoverable:false
+					},
+					{
+						data: [
+							@Html.Raw(string.Join(",", Model.DatesSection.PlotTimes.Select(pt => string.Format("[{0},0]", pt.DateTime.UnixTime() * 1000))))
+						],
+						points: {show: true},
+						hoverable: true
+					}
+				];
+					datesPlot = $.plot($("#section-dates-chart"), datesData, {
+						xaxis: {
+							mode: "time",
+							show: true,
+							tickColor: "rgba(0,0,0,0)",
+							minTickSize: [1, "day"],
+							max: @(Model.DatesSection.Rollout.Value.UnixTime() * 1000),
+							min: @(DateTime.Now.UnixTime() * 1000)
+						},
+						yaxis: {
+							show: false
+						},
+						legend: {
+							show: false
+						},
+						grid: {
+							show: true,
+							borderWidth: 0,
+							hoverable:false
+						}
+				});
+			</text>
+	   }
+	   else
+	   {
+			<text>
+				var datesData = [
+					{
+						data: [
+							[@(Model.DatesSection.Rollout.Value.UnixTime() * 1000), 0],
+							[@(DateTime.Now.UnixTime() * 1000), 0]
+						],
+						lines: { show: true },
+						color: '#6a6',
+						hoverable:false
+					},
+					{
+						data: [
+							@Html.Raw(string.Join(",", Model.DatesSection.PlotTimes.Select(pt => string.Format("[{0},0]", pt.DateTime.UnixTime() * 1000))))
+						],
+						points: {show: true},
+						hoverable: true
+					}
+				];
+					datesPlot = $.plot($("#section-dates-chart"), datesData, {
+						xaxis: {
+							mode: "time",
+							show: true,
+							tickColor: "rgba(0,0,0,0)",
+							minTickSize: [1, "day"],
+							min: @(Model.DatesSection.Rollout.Value.UnixTime() * 1000),
+							max: @(DateTime.Now.UnixTime() * 1000)
+						},
+						yaxis: {
+							show: false
+						},
+						legend: {
+							show: false
+						},
+						grid: {
+							show: true,
+							borderWidth: 0,
+							hoverable:false
+						}
+				});
+				
+			</text>
+	   }
+
+				<text>
+				showDatesPlotTooltips(datesPlot);
+
+				$("#rollout-holidays").popover({
+					html: true,
+					trigger: 'hover',
+					content: '@(Model.DatesSection.RolloutHolidaysBefore.GenerateHolidaysTable())'
+				});
+
+				@if (Model.DatesSection.CodeFreeze.HasValue)
+	{
+					@Html.Raw(string.Format(@"
+						$('#code-freeze-holidays').popover({{
+							html: true,
+							trigger: 'hover',
+							content: '{0}'
+						}});", Model.DatesSection.CodeFreezeHolidaysBefore.GenerateHolidaysTable()))
+	}
+				</text>
+   }
+
+			var pieChartHover = function(event, pos, item) {
+				if (item) {
+					$("#tooltip").remove();
+					var percent = parseFloat(item.series.percent).toFixed(2);
+					showTooltip(pos.pageX, pos.pageY, item.series.label + "<br/>" + percent + "%");
+				} else {
+					$("#tooltip").remove();
+				}
+			};
+
+			
+
+			var pieOpts = {
+				series: {
+					pie: {
+						show: true,
+						radius: 1,
+						label: {
+							show: false
+						},
+						highlight: {
+							opacity: 0
+						}
+					}
+				},
+				legend: {
+					show: true
+				},
+				grid: {
+					hoverable: true
+				}
+			};
+		});
+	</script>
+
+
+@helper DateSection(int? daysRemaining, IList<TimeOffRange> holidays, string title = null, string calendarSpanId = null)
+{
+		if (daysRemaining.HasValue)
+		{
+	@Html.Raw("&nbsp;&ndash;&nbsp;")
+
+			if (daysRemaining > 0)
+			{
+	<span>@(daysRemaining)
+		work days left</span>
+				if (holidays.Any() && !string.IsNullOrEmpty(title) && !string.IsNullOrEmpty(calendarSpanId))
+				{
+	<a href="#" rel="tooltip" title="@(title)" id="@(calendarSpanId)"><i class="icon-time">
+	</i></a>
+				}
+			}
+			else if (daysRemaining == 0)
+			{
+	<span class="badge badge-info">today</span>
+			}
+			else
+			{
+	<span>@(-daysRemaining)
+		work days passed</span>
+			}
+		}
+}

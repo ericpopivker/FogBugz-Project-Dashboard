@@ -1,0 +1,29 @@
+﻿@model int?
+
+@{
+	ViewBag.Title = "Error";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>
+    @if (Model.HasValue)
+    {
+        switch (Model)
+        {
+            case (int) HttpStatusCode.NotFound:
+                @("Sorry, the requested page not found")
+                break;
+            case (int) HttpStatusCode.InternalServerError:
+                @("Sorry, an error occurred while processing your request.")
+                break;
+            default:
+                @("Sorry, an error occurred while processing your request.")
+                break;
+
+        }
+    }
+    else
+    {
+        @("Sorry, an error occurred while processing your request.")
+    }
+</h2>

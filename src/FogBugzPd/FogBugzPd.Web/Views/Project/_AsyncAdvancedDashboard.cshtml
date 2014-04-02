@@ -1,0 +1,285 @@
+﻿@using FogBugzPd.Core
+@using FogBugzPd.Core.FbAccountModule
+@using FogBugzPd.Core.FogBugzApi.Enums
+@using FogBugzPd.Core.FogBugzApi.Types
+@using FogBugzPd.Infrastructure
+@using FogBugzPd.Web
+@using FogBugzPd.Web.Utils
+@using FogBugzPd.Web.Models.Project
+@using FogBugzPd.Web._App_Code.Extensions
+@model AsyncAdvancedDashboardViewModel
+
+<div class="row">
+	<div class="span8 well">
+		<h3>
+			Cases</h3>
+		<div class="row">
+			<div class="span3">
+				<table class="table table-striped stat">
+					<tbody>
+						<tr>
+							<td>
+								Total:
+							</td>
+							<td>
+								@Html.FogBugzCasesLink(Model.CasesSection.Total, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId }, new { target = "_blank" })
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Active:
+							</td>
+							<td>
+								@Html.FogBugzCasesLink(Model.CasesSection.Active, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, Status = CaseStatus.Active }, new { target = "_blank" })
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Resolved:
+							</td>
+							<td>
+								@Html.FogBugzCasesLink(Model.CasesSection.Resolved, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, Status = CaseStatus.Resolved }, new { target = "_blank" })
+							</td>
+						</tr>
+						@if (FbAccountContext.Current.Settings.ResolvedVerifiedStatusId != FbAccountSettings.DefaultStatus.Index.Value)
+						{
+							<tr>
+								<td>
+									Verified:
+								</td>
+								<td>
+									@Html.FogBugzCasesLink(Model.CasesSection.Verified, new FogBugzCasesLinkParams {ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, Status = CaseStatus.ResolvedVerified}, new {target = "_blank"})
+								</td>
+							</tr>
+						}
+					    <tr>
+							<td>
+								Closed:
+							</td>
+							<td>
+								@Html.FogBugzCasesLink(Model.CasesSection.Closed, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, Status = CaseStatus.Closed }, new { target = "_blank" })
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="offset1 span4">
+				<div id="section-cases-chart" style="width: 100%; height: 180px;">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="span8 well" style="float: right;">
+		<h3>
+			Times</h3>
+		<div class="row">
+			<div class="span3">
+				<table class="table table-striped stat">
+					<tbody>
+						<tr>
+							<td>
+								Total Estimated:
+							</td>
+							<td>
+								@Model.TimeSection.TotalEstimated.FormatDuration()
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Elapsed:
+							</td>
+							<td>
+								@Model.TimeSection.Elapsed.FormatDuration()
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Active Estimated:
+							</td>
+							<td>
+								@Model.TimeSection.ActiveEstimated.FormatDuration()
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Active Remaining:
+							</td>
+							<td style="text-align: right">
+								@Model.TimeSection.ActiveRemaining.FormatDuration()
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="offset1 span4">
+				<div id="section-time-chart" style="width: 100%; height: 180px;">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="span8 well">
+		<h3>
+			Estimates <small>for active cases</small></h3>
+		<div class="row">
+			<div class="span3">
+				<table class="table table-striped stat">
+					<tbody>
+						<tr>
+							<td>
+								Cases with estimate:
+							</td>
+							<td>
+								@Html.FogBugzCasesLink(Model.EstimatesSection.WithEstimates, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, Status = CaseStatus.Active, HasEstimate = true}, new { target = "_blank" })
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Cases without estimate:
+							</td>
+							<td>
+								@Html.FogBugzCasesLink(Model.EstimatesSection.WithoutEstimates, new FogBugzCasesLinkParams { ProjectId = Model.ProjectId, MilestoneId = Model.MilestoneId, SubProjectParentCaseId=Model.SubProjectParentCaseId, Status = CaseStatus.Active, HasEstimate = false}, new { target = "_blank" })
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Active cases going over estimate:
+							</td>
+							<td>
+								@Model.EstimatesSection.GoingOverEstimate
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="offset1 span4">
+				<div id="section-estimates-chart" style="width: 100%; height: 180px;">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="span8 well" style="float: right;">
+		<h3>
+			Accuracy <small>for resolved and closed cases</small></h3>
+		<div class="row">
+			<div class="span4">
+				<table class="table table-striped stat">
+					<tbody>
+						<tr>
+							<td>
+								Estimated time:
+							</td>
+							<td>
+								@Model.AccuracySection.EstimatedTime.FormatDuration()
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Actual time:
+							</td>
+							<td>
+								@Model.AccuracySection.ActualTime.FormatDuration()
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div style="float:right;" class="mscache">
+		@Html.RefreshData(Model.MsCache.CreatedAt, Model.ProjectId, Model.MilestoneId, Model.SubProjectParentCaseId, MsCacheDataType.FogBugz_CaseSet)
+	</div>
+	<div style="clear:both;"></div>
+</div>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var casesData = [
+				{ label: 'Active', data: @(Model.CasesSection.Active) },
+				{ label: 'Resolved', data: @(Model.CasesSection.Resolved) },
+				{ label: 'Verified', data: @(Model.CasesSection.Verified) },
+				{ label: 'Closed', data: @(Model.CasesSection.Closed) }
+			];
+
+			var timeData = [
+				{ label: 'Elapsed', data: @(Model.TimeSection.Elapsed.ToString()) },
+				{ label: 'Remaining', data: @(Model.TimeSection.ActiveRemaining.ToString()) }
+			];
+
+			var estimatesData = [
+				{ label: 'Cases with estimates', data: @(Model.EstimatesSection.WithEstimates), color: "rgba(0,255,0,255)" },
+				{ label: 'Cases without estimates', data: @(Model.EstimatesSection.WithoutEstimates), color: "rgba(255,72,72,255)" }
+			];
+
+			var pieChartHover = function(event, pos, item) {
+				if (item) {
+					$("#tooltip").remove();
+					var percent = parseFloat(item.series.percent).toFixed(2);
+					showTooltip(pos.pageX, pos.pageY, item.series.label + "<br/>" + percent + "%");
+				} else {
+					$("#tooltip").remove();
+				}
+			};
+
+			
+
+			var pieOpts = {
+				series: {
+					pie: {
+						show: true,
+						radius: 1,
+						label: {
+							show: false
+						},
+						highlight: {
+							opacity: 0
+						}
+					}
+				},
+				legend: {
+					show: true
+				},
+				grid: {
+					hoverable: true
+				}
+			};
+
+			$.plot($("#section-cases-chart"), casesData, pieOpts);
+			$.plot($("#section-time-chart"), timeData, pieOpts);
+			$.plot($("#section-estimates-chart"), estimatesData, pieOpts);
+			
+			$("#section-cases-chart").bind("plothover", pieChartHover);
+			$("#section-time-chart").bind("plothover", pieChartHover);
+			$("#section-estimates-chart").bind("plothover", pieChartHover);
+		});
+	</script>
+
+
+@helper DateSection(int? daysRemaining, IList<Holiday> holidays, string title = null, string calendarSpanId = null)
+	{
+		if (daysRemaining.HasValue)
+		{
+	@Html.Raw("&nbsp;&ndash;&nbsp;")
+
+			if (daysRemaining > 0)
+			{
+	<span>@(daysRemaining)
+		work days left</span>
+				if (holidays.Any() && !string.IsNullOrEmpty(title) && !string.IsNullOrEmpty(calendarSpanId))
+				{
+	<a href="#" rel="tooltip" title="@(title)" id="@(calendarSpanId)"><i class="icon-time">
+	</i></a>
+				}
+			}
+			else if (daysRemaining == 0)
+			{
+	<span class="badge badge-info">today</span>
+			}
+			else
+			{
+	<span>@(-daysRemaining)
+		work days passed</span>
+			}
+		}
+}

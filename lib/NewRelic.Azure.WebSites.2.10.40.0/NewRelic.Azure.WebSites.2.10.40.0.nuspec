@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>NewRelic.Azure.WebSites</id>
+    <version>2.10.40.0</version>
+    <title>New Relic for Windows Azure Web Sites (x86)</title>
+    <authors>Nick Floyd</authors>
+    <owners>Nick Floyd</owners>
+    <projectUrl>https://newrelic.com/windowsazure</projectUrl>
+    <iconUrl>http://newrelic.com/images/avatar-newrelic.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Go to New Relic to sign up and get your license key at http://newrelic.com or you can get a license key through the Windows Azure management portal via Add-On store.</description>
+    <summary>This package will add all of the resources needed to profile your Windows Azure Web Site. For more information on this package visit: https://newrelic.com/docs/dotnet/azure-web-sites</summary>
+    <releaseNotes>Improvements
+
+* Improved the naming of MVC transactions.  Naming to controller/action should be much more reliable now.
+* Improved WebAPI support.  You should now see Web Transactions grouped by [controller].[action] rather than all WebAPI transactions reporting as System.Web.Http.WebHost.HttpControllerHandler.
+* Fixed a bug whereby IIS applications with underscore characters in their names were not displayed correctly in the Status Monitor.
+* Fixed a bug whereby users could not view the log file for some IIS applications in the Status Monitor.</releaseNotes>
+    <references>
+      <reference file="NewRelic.Api.Agent.dll" />
+    </references>
+  </metadata>
+</package>

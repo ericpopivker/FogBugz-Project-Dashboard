@@ -1,0 +1,21 @@
+﻿// -----------------------------------------------------------------------
+//  <copyright file="FilterType.cs"
+//             project="FogLampz"
+//             assembly="FogLampz"
+//             solution="FogLampz"
+//             company="Chris Adams Studios">
+//      Copyright (c) 1996+. All rights reserved.
+//  </copyright>
+//  <author id="chris@chrisadams-studios.com">Chris Adams</author>
+//  <summary></summary>
+// -----------------------------------------------------------------------
+
+namespace FogLampz.Model
+{
+    public enum FilterType
+    {
+        Builtin,
+        Saved,
+        Shared
+    }
+}
