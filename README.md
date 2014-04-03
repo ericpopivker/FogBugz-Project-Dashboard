@@ -17,7 +17,8 @@ Demo
 
 Check out the demo here:
 
-http://fogbugpd.com
+http://fogbugzpd.com
+
 Login: demo/demo
 
 
