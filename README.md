@@ -22,6 +22,16 @@ http://fogbugzpd.com
 Login: demo/demo
 
 
+Setup
+-----
+
+Installation guide is here:
+[Installation Guide](https://github.com/ericpopivker/FogBugz-Project-Dashboard/wiki/Installation-Guide)
+
+Description of settings you can customize:
+[Configuration Parameters](https://github.com/ericpopivker/FogBugz-Project-Dashboard/wiki/Configuration-Parameters) 
+
+
 Screenshots
 -----------
 
