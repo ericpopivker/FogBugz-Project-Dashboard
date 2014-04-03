@@ -26,19 +26,19 @@ Screenshots
 -----------
 
 
-Status Dashboard
+#### Status Dashboard
 
 ![Status Dashboard](https://dl.dropboxusercontent.com/u/25924236/GitHub/FogBugzPd/Dashboard.png)
 
 
 
-Advanced Dashboard
+#### Advanced Dashboard
 
 ![Advanced Dashboard](https://dl.dropboxusercontent.com/u/25924236/GitHub/FogBugzPd/Advanced_Dashboard.png)
 
 
 
-Cases By User
+#### Cases By User
 
 ![Cases By User](https://dl.dropboxusercontent.com/u/25924236/GitHub/FogBugzPd/By%20User.png)
 
