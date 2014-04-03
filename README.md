@@ -12,6 +12,10 @@ Using this Web App, easily find out:
 * Status of QA, how many tasks left to test, how much time left? Is it enough to finish under deadline
 
 
+
+
+
+
 Demo
 ----
 
@@ -24,6 +28,11 @@ Login: demo/demo
 
 Setup
 -----
+
+Latest Release is 2.0, available from:
+
+https://github.com/ericpopivker/FogBugz-Project-Dashboard/releases
+
 
 Installation guide is here:
 
