@@ -13,7 +13,7 @@ Using this Web App, easily find out:
 
 
 Demo
-====
+----
 
 Check out the demo here:
 
@@ -23,7 +23,7 @@ Login: demo/demo
 
 
 Screenshots
-===========
+-----------
 
 
 
