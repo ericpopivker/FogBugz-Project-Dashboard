@@ -376,7 +376,7 @@ namespace FogBugzPd.Core.FogBugzApi
 
 		private HtmlNode GetGroupsHtmlNode(string token, string fogBugzUrl)//selects all groups on site
 		{
-			var url = fogBugzUrl.Replace("https://", "").Replace("https://", "");
+			var url = fogBugzUrl.Replace("https://", "").Replace("http://", "");
 
 			var cookie = new Cookie("fbToken", token, "/", url) { Expires = DateTime.Now + new TimeSpan(365, 0, 0, 0) };
 			var cookieContainer = new CookieContainer();
